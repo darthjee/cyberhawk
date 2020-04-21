@@ -47,7 +47,7 @@
   fn._error = function(data, responseStatus) {
     if(responseStatus === 422) {
       this.data = data;
-    };
+    }
   };
 
   fn._goIndex = function() {
