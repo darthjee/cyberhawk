@@ -38,14 +38,14 @@
   }
 
   fn.save = function() {
-    promise = this.requester.saveRequest(this.data);
+    var promise = this.requester.saveRequest(this.data);
     promise.then(this._setData);
     promise.then(this._goIndex);
     promise.error(this._error);
   };
 
-  fn._error = function(data, response_status) {
-    if(response_status == 422) {
+  fn._error = function(data, responseStatus) {
+    if(responseStatus == 422) {
       this.data = data;
     };
   };
