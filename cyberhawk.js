@@ -23,7 +23,7 @@
     this.notifier = notifier;
     this.location = $location;
 
-    _.bindAll(this, '_setData', 'save', 'request', '_goIndex');
+    _.bindAll(this, '_setData', 'save', 'request', '_goIndex', '_error');
     this.request();
   };
 
@@ -41,6 +41,13 @@
     promise = this.requester.saveRequest(this.data);
     promise.then(this._setData);
     promise.then(this._goIndex);
+    promise.error(this._error);
+  };
+
+  fn._error = function(data, response_status) {
+    if(response_status == 422) {
+      this.data = data;
+    };
   };
 
   fn._goIndex = function() {
