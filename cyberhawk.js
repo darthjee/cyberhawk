@@ -45,7 +45,7 @@
   };
 
   fn._error = function(data, responseStatus) {
-    if(responseStatus == 422) {
+    if(responseStatus === 422) {
       this.data = data;
     };
   };
