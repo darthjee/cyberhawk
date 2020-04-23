@@ -18,7 +18,8 @@
 
     bind(controller, methods) {
       _.each(methods, function(method) {
-        controller[method] = Controller.prototype[method]
+        var bindedMethod = _.bind(Controller.prototype[method], controller);
+        controller[method] = bindedMethod;
       });
 
       this.controller = controller;
