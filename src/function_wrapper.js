@@ -37,10 +37,12 @@
 
   _.wrapFunctions = function(object, methods, bindArguments) {
     for (var method in methods) {
-      var wrapper = methods[method],
-        wrapper = new FunctionWrapper(object, method, wrapper);
+      if (methods.hasOwnProperty(method)) {
+        var wrapper = methods[method],
+          functionWrapper = new FunctionWrapper(object, method, wrapper);
 
-      object[method] = wrapper.wrap(bindArguments);
+        object[method] = functionWrapper.wrap(bindArguments);
+      }
     }
   };
 }(window._));
