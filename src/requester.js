@@ -1,11 +1,5 @@
 //REQUESTER
 (function(_, angular, Cyberhawk) {
-  RequesterServiceBuilder.prototype.build = function($location) {
-    var path = $location.$$path + ".json";
-    var savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
-    return new RequesterService(path, savePath, this.http);
-  };
-
   function RequesterService(path, savePath, $http) {
     this.path = path;
     this.savePath = savePath;
@@ -37,6 +31,12 @@
   function RequesterServiceBuilder($http) {
     this.http = $http;
   }
+
+  RequesterServiceBuilder.prototype.build = function($location) {
+    var path = $location.$$path + ".json";
+    var savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+    return new RequesterService(path, savePath, this.http);
+  };
 
   function RequesterServiceFactory($http) {
     return new RequesterServiceBuilder($http);
