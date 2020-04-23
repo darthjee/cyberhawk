@@ -24,7 +24,7 @@
           var bindedMethod = _.bind(Controller.prototype[method], controller);
           controller[method] = bindedMethod;
         }
-      };
+      }
 
       this.controller = controller;
       return this;
