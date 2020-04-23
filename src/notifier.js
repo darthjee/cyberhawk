@@ -1,4 +1,3 @@
-//NOTIFIER
 (function(_, angular, Cyberhawk) {
   var module = angular.module("cyberhawk/notifier", []);
 

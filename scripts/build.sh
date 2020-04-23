@@ -5,6 +5,7 @@ FILES="cyberhawk.js controller.js notifier.js requester.js delegator.js function
 echo "" > cyberhawk.js
 
 for FILE in $FILES; do
+  echo "// "$FILE >> cyberhawk.js
   cat "src/$FILE" >> cyberhawk.js
   echo "" >> cyberhawk.js
 done
