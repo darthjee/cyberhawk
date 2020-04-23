@@ -26,7 +26,7 @@
   fn._setData = function(response) {
     this.data = response.data;
     this.loaded = true;
-  }
+  };
 
   fn.save = function() {
     var promise = this.requester.saveRequest(this.data);
@@ -46,9 +46,9 @@
   };
 
   fn.delete = function(id) {
-    promise = this.requester.deleteRequest(id);
+    var promise = this.requester.deleteRequest(id);
     promise.then(this.request);
-  }
+  };
 
   app.controller("Cyberhawk.Controller", [
     "cyberhawk_requester", "cyberhawk_notifier", "$location",

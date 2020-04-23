@@ -1,10 +1,6 @@
 //NOTIFIER
 (function(_, angular, Cyberhawk) {
-  var module = angular.module('cyberhawk/notifier', []);
-
-  Cyberhawk.NotifierServiceFactory = function() {
-    return new NotifierService();
-  };
+  var module = angular.module("cyberhawk/notifier", []);
 
   function NotifierService() {
     this.watchs = {};
@@ -23,11 +19,15 @@
   };
 
   fn.listeners = function(key) {
-    if (this.watchs[key] === undefined) {
+    if (typeof this.watchs[key] == "undefined") {
       this.watchs[key] = [];
     }
     return this.watchs[key];
   };
 
-module.service('cyberhawk_notifier', [Cyberhawk.NotifierServiceFactory])
+  Cyberhawk.NotifierServiceFactory = function() {
+    return new NotifierService();
+  };
+
+module.service("cyberhawk_notifier", [Cyberhawk.NotifierServiceFactory])
 }(window._, window.angular, window.Cyberhawk));
