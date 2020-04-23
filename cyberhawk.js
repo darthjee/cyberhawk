@@ -1,3 +1,4 @@
+
 // CYBERHAWK
 (function(angular, global) {
   global.Cyberhawk = {};
@@ -6,7 +7,6 @@
     'cyberhawk/requester', 'cyberhawk/controller'
   ])
 }(window.angular, window));
-
 // CONTROLLER
 (function(_, angular, Cyberhawk) {
   function Controller(builder, notifier, $location) {
@@ -66,7 +66,6 @@
 
   Cyberhawk.Controller = Controller;
 }(window._, window.angular, window.Cyberhawk));
-
 //NOTIFIER
 (function(_, angular, Cyberhawk) {
   var module = angular.module('cyberhawk/notifier', []);
@@ -100,7 +99,6 @@
 
 module.service('cyberhawk_notifier', [Cyberhawk.NotifierServiceFactory])
 }(window._, window.angular, window.Cyberhawk));
-
 //REQUESTER
 (function(_, angular) {
   function RequesterServiceFactory($http) {
