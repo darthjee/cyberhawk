@@ -1,4 +1,3 @@
-// CYBERHAWK
 (function(angular, global) {
   global.Cyberhawk = {};
 

@@ -1,10 +1,11 @@
 #!/bin/bash
 
-FILES="cyberhawk.js controller.js notifier.js requester.js"
+FILES="cyberhawk.js controller.js notifier.js requester.js delegator.js function_wrapper.js binded_http.js"
 
 echo "" > cyberhawk.js
 
 for FILE in $FILES; do
+  echo "// $FILE" >> cyberhawk.js
   cat "src/$FILE" >> cyberhawk.js
   echo "" >> cyberhawk.js
 done

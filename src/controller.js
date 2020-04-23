@@ -1,4 +1,3 @@
-// CONTROLLER
 (function(_, angular, Cyberhawk) {
   function Controller(builder, notifier, $location) {
     this.construct(builder.build($location), notifier, $location);

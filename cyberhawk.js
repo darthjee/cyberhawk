@@ -1,5 +1,5 @@
 
-// CYBERHAWK
+// cyberhawk.js
 (function(angular, global) {
   global.Cyberhawk = {};
 
@@ -8,7 +8,7 @@
   ]);
 }(window.angular, window));
 
-// CONTROLLER
+// controller.js
 (function(_, angular, Cyberhawk) {
   function Controller(builder, notifier, $location) {
     this.construct(builder.build($location), notifier, $location);
@@ -68,7 +68,7 @@
   Cyberhawk.Controller = Controller;
 }(window._, window.angular, window.Cyberhawk));
 
-//NOTIFIER
+// notifier.js
 (function(_, angular, Cyberhawk) {
   var module = angular.module("cyberhawk/notifier", []);
 
@@ -102,6 +102,7 @@
   module.service("cyberhawk_notifier", [Cyberhawk.NotifierServiceFactory]);
 }(window._, window.angular, window.Cyberhawk));
 
+// requester.js
 //REQUESTER
 (function(_, angular, Cyberhawk) {
   function RequesterService(path, savePath, $http) {
@@ -151,4 +152,130 @@
     RequesterServiceFactory
   ]);
 }(window._, window.angular, window.Cyberhawk));
+
+// delegator.js
+(function(_) {
+  class Delegator {
+    constructor(caller, objectName) {
+      this.caller = caller;
+      this.objectName = objectName;
+      _.bindAll(this, "delegate");
+    }
+
+    delegate(method) {
+      var objectName = this.objectName;
+
+      this.caller.prototype[method] = function() {
+        var object = this[objectName];
+
+        return object[method].apply(object, arguments);
+      };
+    }
+  }
+
+  _.delegate = function(caller, object) {
+    var methods = [].slice.call(arguments, 2),
+      delegator = new Delegator(caller, object);
+
+    _.each(methods, delegator.delegate);
+  };
+}(window._));
+
+// function_wrapper.js
+(function(_) {
+  class FunctionWrapper {
+    constructor(object, method, wrapper) {
+      this.object = object;
+      this.method = method;
+      this.wrapper = wrapper;
+      this.original = object[method];
+    }
+
+    wrap(bindArguments) {
+      var that = this;
+
+      return function() {
+        var binded = that._bind(that.original, this, arguments, bindArguments);
+        var args = [binded].concat([].slice.call(arguments, 0));
+
+        return that.wrapper.apply(this, args);
+      };
+    }
+
+    _bind(func, caller, args, bindArguments) {
+      if (bindArguments) {
+        return function() {
+          return func.apply(caller, args);
+        };
+      } else {
+        return _.bind(func, caller);
+      }
+    }
+  }
+
+  _.wrapFunction = function(object, method, wrapper, bindArguments) {
+    var functionWrapper = new FunctionWrapper(object, method, wrapper);
+
+    object[method] = functionWrapper.wrap(bindArguments);
+  };
+
+  _.wrapFunctions = function(object, methods, bindArguments) {
+    for (var method in methods) {
+      if (methods.hasOwnProperty(method)) {
+        var wrapper = methods[method],
+          functionWrapper = new FunctionWrapper(object, method, wrapper);
+
+        object[method] = functionWrapper.wrap(bindArguments);
+      }
+    }
+  };
+}(window._));
+
+// binded_http.js
+(function(_, angular) {
+  var module = angular.module("binded_http", []);
+
+  class BindedHttpService {
+    constructor($http) {
+      this.http = $http;
+    }
+
+    bind(controller) {
+      this.controller = controller;
+      return this;
+    }
+  }
+
+  _.delegate(
+    BindedHttpService, "http", "get", "post", "delete"
+  );
+
+
+  function watch(original) {
+    this.controller.initRequest();
+    var promisse = original();
+
+    promisse.finally(this.controller.finishRequest);
+    return promisse;
+  }
+
+  var middleware = {
+    post: watch,
+    get: watch,
+    delete: watch
+  };
+
+  _.wrapFunctions(
+    BindedHttpService.prototype, middleware, true
+  );
+
+  function BindedHttpServiceFactory($http) {
+    return new BindedHttpService($http);
+  }
+
+  module.service("binded_http", [
+    "$http",
+    BindedHttpServiceFactory
+  ]);
+}(window._, window.angular));
 
