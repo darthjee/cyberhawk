@@ -103,7 +103,7 @@
     this.location = $location;
 
     _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
-    this.requester.bind(this, ["initRequest", "finishRequest"]);
+    this.requester.bind(this);
     this.request();
   };
 
@@ -185,14 +185,16 @@
 (function(_, angular) {
   var module = angular.module("binded_http", []);
 
-  class Controller {
+  class Controller {}
+
+  _.extend(Controller.prototype,{
     initRequest() {
       this.ongoing = true;
-    }
+    },
     finishRequest() {
       this.ongoing = false;
     }
-  }
+  });
 
   class BindedHttpService {
     constructor($http) {
@@ -200,10 +202,13 @@
       this.controller = new Controller();
     }
 
-    bind(controller, methods) {
-      _.each(methods, function(method) {
-        controller[method] = Controller.prototype[method]
-      });
+    bind(controller) {
+      for (var method in Controller.prototype) {
+        if (! controller[method]) {
+          var bindedMethod = _.bind(Controller.prototype[method], controller);
+          controller[method] = bindedMethod;
+        }
+      };
 
       this.controller = controller;
       return this;
@@ -257,8 +262,8 @@
   var fn = RequesterService.prototype,
       module = angular.module("cyberhawk/requester", ["binded_http"]);
 
-  fn.bind = function(controller, methods) {
-    this.http.bind(controller, methods);
+  fn.bind = function(controller) {
+    this.http.bind(controller);
   };
 
   fn.request = function(callback) {

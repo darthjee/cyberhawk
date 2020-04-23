@@ -1,14 +1,16 @@
 (function(_, angular) {
   var module = angular.module("binded_http", []);
 
-  class Controller {
+  class Controller {}
+
+  _.extend(Controller.prototype,{
     initRequest() {
       this.ongoing = true;
-    }
+    },
     finishRequest() {
       this.ongoing = false;
     }
-  }
+  });
 
   class BindedHttpService {
     constructor($http) {
@@ -16,11 +18,13 @@
       this.controller = new Controller();
     }
 
-    bind(controller, methods) {
-      _.each(methods, function(method) {
-        var bindedMethod = _.bind(Controller.prototype[method], controller);
-        controller[method] = bindedMethod;
-      });
+    bind(controller) {
+      for (var method in Controller.prototype) {
+        if (! controller[method]) {
+          var bindedMethod = _.bind(Controller.prototype[method], controller);
+          controller[method] = bindedMethod;
+        }
+      };
 
       this.controller = controller;
       return this;

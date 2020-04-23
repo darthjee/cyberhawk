@@ -11,8 +11,8 @@
   var fn = RequesterService.prototype,
       module = angular.module("cyberhawk/requester", ["binded_http"]);
 
-  fn.bind = function(controller, methods) {
-    this.http.bind(controller, methods);
+  fn.bind = function(controller) {
+    this.http.bind(controller);
   };
 
   fn.request = function(callback) {
