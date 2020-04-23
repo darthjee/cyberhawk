@@ -159,17 +159,18 @@
     constructor(caller, objectName) {
       this.caller = caller;
       this.objectName = objectName;
-      _.bindAll(this, 'delegate');
+      _.bindAll(this, "delegate");
     }
 
     delegate(method) {
       var objectName = this.objectName;
 
       this.caller.prototype[method] = function() {
-        var object = this[objectName]
+        var object = this[objectName];
+
         return object[method].apply(object, arguments);
       };
-    };
+    }
   }
 
   _.delegate = function(caller, object) {
@@ -177,8 +178,8 @@
       delegator = new Delegator(caller, object);
 
     _.each(methods, delegator.delegate);
-  }
-})(window._);
+  };
+}(window._));
 
 // function_wrapper.js
 (function(_) {
@@ -213,24 +214,26 @@
   }
 
   _.wrapFunction = function(object, method, wrapper, bindArguments) {
-    var wrapper = new FunctionWrapper(object, method, wrapper);
+    var functionWrapper = new FunctionWrapper(object, method, wrapper);
 
-    object[method] = wrapper.wrap(bindArguments);
+    object[method] = functionWrapper.wrap(bindArguments);
   };
 
   _.wrapFunctions = function(object, methods, bindArguments) {
-    for (method in methods) {
-      var wrapper = methods[method],
-        wrapper = new FunctionWrapper(object, method, wrapper);
+    for (var method in methods) {
+      if (methods.hasOwnProperty(method)) {
+        var wrapper = methods[method],
+          functionWrapper = new FunctionWrapper(object, method, wrapper);
 
-      object[method] = wrapper.wrap(bindArguments);
+        object[method] = functionWrapper.wrap(bindArguments);
+      }
     }
   };
-})(window._);
+}(window._));
 
 // binded_http.js
 (function(_, angular) {
-  var module = angular.module('binded_http', []);
+  var module = angular.module("binded_http", []);
 
   class BindedHttpService {
     constructor($http) {
@@ -244,13 +247,14 @@
   }
 
   _.delegate(
-    BindedHttpService, 'http', 'get', 'post', 'delete'
+    BindedHttpService, "http", "get", "post", "delete"
   );
 
 
   function watch(original) {
     this.controller.initRequest();
-    var promisse = original()
+    var promisse = original();
+
     promisse.finally(this.controller.finishRequest);
     return promisse;
   }
@@ -269,9 +273,9 @@
     return new BindedHttpService($http);
   }
 
-  module.service('binded_http', [
-    '$http',
+  module.service("binded_http", [
+    "$http",
     BindedHttpServiceFactory
-  ])
+  ]);
 }(window._, window.angular));
 
