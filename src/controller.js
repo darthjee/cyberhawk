@@ -1,6 +1,6 @@
 (function(_, angular, Cyberhawk) {
-  function Controller(builder, notifier, $location) {
-    this.construct(builder.build($location), notifier, $location);
+  function Controller(builder, notifier, $location, $timeout) {
+    this.construct(builder.build($location), notifier, $location, $timeout);
   }
 
   var fn = Controller.prototype,
@@ -8,10 +8,11 @@
         "cyberhawk/notifier", "cyberhawk/requester"
       ]);
 
-  fn.construct = function(requester, notifier, $location) {
+  fn.construct = function(requester, notifier, $location, $timeout) {
     this.requester = requester;
     this.notifier = notifier;
     this.location = $location;
+    this.$timeout = $timeout;
 
     _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
     this.requester.bind(this);
@@ -51,7 +52,10 @@
   };
 
   app.controller("Cyberhawk.Controller", [
-    "cyberhawk_requester", "cyberhawk_notifier", "$location",
+    "cyberhawk_requester",
+    "cyberhawk_notifier",
+    "$location",
+    "$timeout",
     Controller
   ]);
 
