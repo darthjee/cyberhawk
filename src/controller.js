@@ -19,7 +19,7 @@
   };
 
   fn.request = function() {
-    promise = this.requester.request();
+    var promise = this.requester.request();
     promise.then(this._setData);
   };
 
