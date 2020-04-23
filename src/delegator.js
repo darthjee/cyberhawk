@@ -22,5 +22,5 @@
       delegator = new Delegator(caller, object);
 
     _.each(methods, delegator.delegate);
-  }
+  };
 }(window._));

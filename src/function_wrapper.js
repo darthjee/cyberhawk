@@ -30,17 +30,17 @@
   }
 
   _.wrapFunction = function(object, method, wrapper, bindArguments) {
-    var wrapper = new FunctionWrapper(object, method, wrapper);
+    var functionWrapper = new FunctionWrapper(object, method, wrapper);
 
-    object[method] = wrapper.wrap(bindArguments);
+    object[method] = functionWrapper.wrap(bindArguments);
   };
 
   _.wrapFunctions = function(object, methods, bindArguments) {
-    for (method in methods) {
+    for (var method in methods) {
       var wrapper = methods[method],
         wrapper = new FunctionWrapper(object, method, wrapper);
 
       object[method] = wrapper.wrap(bindArguments);
     }
   };
-})(window._);
+}(window._));
