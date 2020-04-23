@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILES="cyberhawk.js controller.js notifier.js requester.js delegator.js function_wrapper.js"
+FILES="cyberhawk.js controller.js notifier.js requester.js delegator.js function_wrapper.js binded_http.js"
 
 echo "" > cyberhawk.js
 
