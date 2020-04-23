@@ -1,11 +1,7 @@
 //REQUESTER
-(function(_, angular) {
+(function(_, angular, Cyberhawk) {
   function RequesterServiceFactory($http) {
     return new RequesterServiceBuilder($http);
-  }
-
-  function RequesterServiceBuilder($http) {
-    this.http = $http;
   }
 
   RequesterServiceBuilder.prototype.build = function($location) {
@@ -42,8 +38,12 @@
 
   Cyberhawk.RequesterService = RequesterService;
 
+  function RequesterServiceBuilder($http) {
+    this.http = $http;
+  }
+
   module.service("cyberhawk_requester", [
     "$http",
     RequesterServiceFactory
   ]);
-})(window._, window.angular, Cyberhawk);
+}(window._, window.angular, Cyberhawk));

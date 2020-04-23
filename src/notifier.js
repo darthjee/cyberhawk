@@ -19,7 +19,7 @@
   };
 
   fn.listeners = function(key) {
-    if (typeof this.watchs[key] == "undefined") {
+    if (typeof this.watchs[key] === "undefined") {
       this.watchs[key] = [];
     }
     return this.watchs[key];
