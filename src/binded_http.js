@@ -1,9 +1,19 @@
 (function(_, angular) {
   var module = angular.module("binded_http", []);
 
+  class Controller {
+    initRequest() {
+      console.info('request');
+    }
+    finishRequest() {
+      console.info('end of request');
+    }
+  }
+
   class BindedHttpService {
     constructor($http) {
       this.http = $http;
+      this.controller = new Controller();
     }
 
     bind(controller) {
