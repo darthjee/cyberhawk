@@ -14,6 +14,7 @@
     this.location = $location;
 
     _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
+    this.requester.bind(this, ["initRequest", "finishRequest"]);
     this.request();
   };
 

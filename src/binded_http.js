@@ -16,7 +16,11 @@
       this.controller = new Controller();
     }
 
-    bind(controller) {
+    bind(controller, methods) {
+      _.each(methods, function(method) {
+        controller[method] = Controller.prototype[method]
+      });
+
       this.controller = controller;
       return this;
     }
