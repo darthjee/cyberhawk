@@ -9,7 +9,7 @@
 
     wrap(bindArguments) {
       var that = this;
-      
+
       return function() {
         var binded = that._bind(that.original, this, arguments, bindArguments);
         var args = [binded].concat([].slice.call(arguments, 0));
