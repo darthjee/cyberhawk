@@ -1,9 +1,5 @@
 //REQUESTER
 (function(_, angular, Cyberhawk) {
-  function RequesterServiceFactory($http) {
-    return new RequesterServiceBuilder($http);
-  }
-
   RequesterServiceBuilder.prototype.build = function($location) {
     var path = $location.$$path + ".json";
     var savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
@@ -42,8 +38,12 @@
     this.http = $http;
   }
 
+  function RequesterServiceFactory($http) {
+    return new RequesterServiceBuilder($http);
+  }
+
   module.service("cyberhawk_requester", [
     "$http",
     RequesterServiceFactory
   ]);
-}(window._, window.angular, Cyberhawk));
+}(window._, window.angular, window.Cyberhawk));
