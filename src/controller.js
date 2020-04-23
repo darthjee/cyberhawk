@@ -5,8 +5,8 @@
   }
 
   var fn = Controller.prototype,
-      app = angular.module('cyberhawk/controller', [
-        'cyberhawk/notifier', 'cyberhawk/requester'
+      app = angular.module("cyberhawk/controller", [
+        "cyberhawk/notifier", "cyberhawk/requester"
       ]);
 
   fn.construct = function(requester, notifier, $location) {
@@ -14,7 +14,7 @@
     this.notifier = notifier;
     this.location = $location;
 
-    _.bindAll(this, '_setData', 'save', 'request', '_goIndex', '_error');
+    _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
     this.request();
   };
 
@@ -42,7 +42,7 @@
   };
 
   fn._goIndex = function() {
-    this.location.path(this.location.$$path.replace(/(\w*\/edit|new)/, ''));
+    this.location.path(this.location.$$path.replace(/(\w*\/edit|new)/, ""));
   };
 
   fn.delete = function(id) {
@@ -50,8 +50,8 @@
     promise.then(this.request);
   }
 
-  app.controller('Cyberhawk.Controller', [
-    'cyberhawk_requester', 'cyberhawk_notifier', '$location',
+  app.controller("Cyberhawk.Controller", [
+    "cyberhawk_requester", "cyberhawk_notifier", "$location",
     Controller
   ]);
 
