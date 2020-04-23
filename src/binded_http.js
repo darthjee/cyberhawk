@@ -3,10 +3,10 @@
 
   class Controller {
     initRequest() {
-      console.info('request');
+      this.ongoing = true;
     }
     finishRequest() {
-      console.info('end of request');
+      this.ongoing = false;
     }
   }
 
