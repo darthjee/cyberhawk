@@ -4,11 +4,16 @@
     this.path = path;
     this.savePath = savePath;
     this.http = $http;
+
     _.bind(this.request, this);
   }
 
   var fn = RequesterService.prototype,
-      module = angular.module("cyberhawk/requester", []);
+      module = angular.module("cyberhawk/requester", ["binded_http"]);
+
+  fn.bind = function(controller) {
+    this.http.bind(controller);
+  };
 
   fn.request = function(callback) {
     return this.http.get(this.path);
@@ -43,7 +48,7 @@
   }
 
   module.service("cyberhawk_requester", [
-    "$http",
+    "binded_http",
     RequesterServiceFactory
   ]);
 }(window._, window.angular, window.Cyberhawk));
