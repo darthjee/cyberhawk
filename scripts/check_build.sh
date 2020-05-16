@@ -2,4 +2,10 @@
 
 ./scripts/build.sh
 
-git diff
+DIFF=$(git diff)
+
+if [[ $DIFF ]]; then
+  exit 1
+else
+  exit 0
+fi
