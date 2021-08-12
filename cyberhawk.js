@@ -90,12 +90,21 @@
 //PAGINATION
 (function(_, angular, Cyberhawk) {
   function PaginationService() {
+    this.pages = 1;
+    this.page = 1;
   }
 
   var fn = PaginationService.prototype,
       module = angular.module("cyberhawk/pagination", []);
 
   Cyberhawk.PaginationService = PaginationService;
+
+  fn.parse = function(response) {
+    this.pages    = response.headers('pages');
+    this.page     = response.headers('page');
+    this.per_page = response.headers('per_page');
+    console.info(this);
+  };
 
   function PaginationServiceFactory() {
     return new PaginationService();
@@ -137,14 +146,13 @@
   };
 
   fn._setData = function(response) {
-    this._setPagination();
+    this._setPagination(response);
     this.data = response.data;
     this.loaded = true;
   };
 
   fn._setPagination = function(response) {
-    console.info(this.pagination);
-    //this.pagination.parse(response);
+    this.pagination.parse(response);
   };
 
   fn.save = function() {

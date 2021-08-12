@@ -27,13 +27,13 @@
   };
 
   fn._setData = function(response) {
-    this._setPagination();
+    this._setPagination(response);
     this.data = response.data;
     this.loaded = true;
   };
 
   fn._setPagination = function(response) {
-    //this.pagination.parse(response);
+    this.pagination.parse(response);
   };
 
   fn.save = function() {
