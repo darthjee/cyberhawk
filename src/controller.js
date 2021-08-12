@@ -25,6 +25,7 @@
   };
 
   fn._setData = function(response) {
+    console.info(response);
     this.data = response.data;
     this.loaded = true;
   };

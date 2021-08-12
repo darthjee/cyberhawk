@@ -114,12 +114,14 @@
   };
 
   fn._setData = function(response) {
+    consol.info(response);
     this.data = response.data;
     this.loaded = true;
   };
 
   fn.save = function() {
     var promise = this.requester.saveRequest(this.payload());
+
     promise.then(this._setData);
     promise.then(this._goIndex);
     promise.error(this._error);
@@ -297,9 +299,10 @@
   }
 
   RequesterServiceBuilder.prototype.build = function($location) {
-    var query = querystring.encode($location.$$search);
-    var path = $location.$$path + ".json?" + query;
-    var savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+    var query = querystring.encode($location.$$search),
+        path = $location.$$path + ".json?" + query,
+        savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+
     return new RequesterService(path, savePath, this.http);
   };
 
