@@ -89,21 +89,22 @@
 // pagination.js
 //PAGINATION
 (function(_, angular, Cyberhawk) {
-  function PaginationService() {
-    this.pages = 1;
-    this.page = 1;
+  class PaginationService {
+    constructor() {
+      this.pages = 1;
+      this.page = 1;
+    }
+
+    parse(response) {
+      this.pages    = response.headers('pages');
+      this.page     = response.headers('page');
+      this.per_page = response.headers('per_page');
+    }
   }
 
-  var fn = PaginationService.prototype,
-      module = angular.module("cyberhawk/pagination", []);
+  var module = angular.module("cyberhawk/pagination", []);
 
   Cyberhawk.PaginationService = PaginationService;
-
-  fn.parse = function(response) {
-    this.pages    = response.headers('pages');
-    this.page     = response.headers('page');
-    this.per_page = response.headers('per_page');
-  };
 
   function PaginationServiceFactory() {
     return new PaginationService();
