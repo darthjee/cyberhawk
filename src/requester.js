@@ -1,5 +1,7 @@
 //REQUESTER
 (function(_, angular, Cyberhawk, querystring) {
+  var module = angular.module("cyberhawk/requester", ["binded_http"]);
+
   class RequesterService {
     constructor(path, savePath, $http) {
       this.path = path;
@@ -29,8 +31,6 @@
       return this.http.delete(this.path.replace(/(\.json)?$/, "/" + id + ".json"));
     }
   }
-
-  var module = angular.module("cyberhawk/requester", ["binded_http"]);
 
   Cyberhawk.RequesterService = RequesterService;
 

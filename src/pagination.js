@@ -1,5 +1,7 @@
 //PAGINATION
 (function(_, angular, Cyberhawk) {
+  var module = angular.module("cyberhawk/pagination", []);
+
   class PaginationService {
     constructor() {
       this.pages = 1;
@@ -12,8 +14,6 @@
       this.per_page = response.headers('per_page');
     }
   }
-
-  var module = angular.module("cyberhawk/pagination", []);
 
   Cyberhawk.PaginationService = PaginationService;
 

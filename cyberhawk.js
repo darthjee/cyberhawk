@@ -89,6 +89,8 @@
 // pagination.js
 //PAGINATION
 (function(_, angular, Cyberhawk) {
+  var module = angular.module("cyberhawk/pagination", []);
+
   class PaginationService {
     constructor() {
       this.pages = 1;
@@ -101,8 +103,6 @@
       this.per_page = response.headers('per_page');
     }
   }
-
-  var module = angular.module("cyberhawk/pagination", []);
 
   Cyberhawk.PaginationService = PaginationService;
 
@@ -297,6 +297,8 @@
 // requester.js
 //REQUESTER
 (function(_, angular, Cyberhawk, querystring) {
+  var module = angular.module("cyberhawk/requester", ["binded_http"]);
+
   class RequesterService {
     constructor(path, savePath, $http) {
       this.path = path;
@@ -326,8 +328,6 @@
       return this.http.delete(this.path.replace(/(\.json)?$/, "/" + id + ".json"));
     }
   }
-
-  var module = angular.module("cyberhawk/requester", ["binded_http"]);
 
   Cyberhawk.RequesterService = RequesterService;
 
