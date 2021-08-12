@@ -103,7 +103,6 @@
     this.pages    = response.headers('pages');
     this.page     = response.headers('page');
     this.per_page = response.headers('per_page');
-    console.info(this);
   };
 
   function PaginationServiceFactory() {
