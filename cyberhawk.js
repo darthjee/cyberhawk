@@ -266,7 +266,6 @@
     BindedHttpService, "http", "get", "post", "delete"
   );
 
-
   function watch(original) {
     this.controller.initRequest();
     var promisse = original();
