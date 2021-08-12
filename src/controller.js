@@ -31,6 +31,7 @@
 
   fn.save = function() {
     var promise = this.requester.saveRequest(this.payload());
+
     promise.then(this._setData);
     promise.then(this._goIndex);
     promise.error(this._error);
