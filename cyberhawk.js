@@ -258,7 +258,7 @@
 
 // requester.js
 //REQUESTER
-(function(_, angular, Cyberhawk) {
+(function(_, angular, Cyberhawk, querystring) {
   function RequesterService(path, savePath, $http) {
     this.path = path;
     this.savePath = savePath;
@@ -297,7 +297,8 @@
   }
 
   RequesterServiceBuilder.prototype.build = function($location) {
-    var path = $location.$$path + ".json";
+    var query = querystring.encode($location.$$search);
+    var path = $location.$$path + ".json?" + query;
     var savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
     return new RequesterService(path, savePath, this.http);
   };
@@ -310,5 +311,5 @@
     "binded_http",
     RequesterServiceFactory
   ]);
-}(window._, window.angular, window.Cyberhawk));
+}(window._, window.angular, window.Cyberhawk, window.querystring));
 
