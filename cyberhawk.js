@@ -86,20 +86,51 @@
   ]);
 }(window.angular, window));
 
+// pagination.js
+//PAGINATION
+(function(_, angular, Cyberhawk) {
+  function PaginationService() {
+    this.pages = 1;
+    this.page = 1;
+  }
+
+  var fn = PaginationService.prototype,
+      module = angular.module("cyberhawk/pagination", []);
+
+  Cyberhawk.PaginationService = PaginationService;
+
+  fn.parse = function(response) {
+    this.pages    = response.headers('pages');
+    this.page     = response.headers('page');
+    this.per_page = response.headers('per_page');
+  };
+
+  function PaginationServiceFactory() {
+    return new PaginationService();
+  }
+
+  module.service("cyberhawk_pagination", [
+    PaginationServiceFactory
+  ]);
+}(window._, window.angular, window.Cyberhawk));
+
+
 // controller.js
 (function(_, angular, Cyberhawk) {
-  function Controller(builder, notifier, $location, $timeout) {
-    this.construct(builder.build($location), notifier, $location, $timeout);
+  function Controller(builder, notifier, pagination, $location, $timeout) {
+    this.construct(builder.build($location), notifier, pagination, $location, $timeout);
   }
 
   var fn = Controller.prototype,
       app = angular.module("cyberhawk/controller", [
-        "cyberhawk/notifier", "cyberhawk/requester"
+        "cyberhawk/notifier", "cyberhawk/requester",
+        "cyberhawk/pagination"
       ]);
 
-  fn.construct = function(requester, notifier, $location, $timeout) {
+  fn.construct = function(requester, notifier, pagination, $location, $timeout) {
     this.requester = requester;
     this.notifier = notifier;
+    this.pagination = pagination;
     this.location = $location;
     this.$timeout = $timeout;
 
@@ -114,12 +145,18 @@
   };
 
   fn._setData = function(response) {
+    this._setPagination(response);
     this.data = response.data;
     this.loaded = true;
   };
 
+  fn._setPagination = function(response) {
+    this.pagination.parse(response);
+  };
+
   fn.save = function() {
     var promise = this.requester.saveRequest(this.payload());
+
     promise.then(this._setData);
     promise.then(this._goIndex);
     promise.error(this._error);
@@ -147,6 +184,7 @@
   app.controller("Cyberhawk.Controller", [
     "cyberhawk_requester",
     "cyberhawk_notifier",
+    "cyberhawk_pagination",
     "$location",
     "$timeout",
     Controller
@@ -258,7 +296,7 @@
 
 // requester.js
 //REQUESTER
-(function(_, angular, Cyberhawk) {
+(function(_, angular, Cyberhawk, querystring) {
   function RequesterService(path, savePath, $http) {
     this.path = path;
     this.savePath = savePath;
@@ -297,8 +335,10 @@
   }
 
   RequesterServiceBuilder.prototype.build = function($location) {
-    var path = $location.$$path + ".json";
-    var savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+    var query = querystring.encode($location.$$search),
+        path = $location.$$path + ".json?" + query,
+        savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+
     return new RequesterService(path, savePath, this.http);
   };
 
@@ -310,5 +350,5 @@
     "binded_http",
     RequesterServiceFactory
   ]);
-}(window._, window.angular, window.Cyberhawk));
+}(window._, window.angular, window.Cyberhawk, window.querystring));
 
