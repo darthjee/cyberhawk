@@ -89,21 +89,22 @@
 // pagination.js
 //PAGINATION
 (function(_, angular, Cyberhawk) {
-  function PaginationService() {
-    this.pages = 1;
-    this.page = 1;
+  var module = angular.module("cyberhawk/pagination", []);
+
+  class PaginationService {
+    constructor() {
+      this.pages = 1;
+      this.page = 1;
+    }
+
+    parse(response) {
+      this.pages    = response.headers('pages');
+      this.page     = response.headers('page');
+      this.per_page = response.headers('per_page');
+    }
   }
 
-  var fn = PaginationService.prototype,
-      module = angular.module("cyberhawk/pagination", []);
-
   Cyberhawk.PaginationService = PaginationService;
-
-  fn.parse = function(response) {
-    this.pages    = response.headers('pages');
-    this.page     = response.headers('page');
-    this.per_page = response.headers('per_page');
-  };
 
   function PaginationServiceFactory() {
     return new PaginationService();
@@ -197,28 +198,28 @@
 (function(_, angular, Cyberhawk) {
   var module = angular.module("cyberhawk/notifier", []);
 
-  function NotifierService() {
-    this.watchs = {};
-  }
-
-  var fn = NotifierService.prototype;
-
-  fn.notify = function(key, value) {
-    _.each(this.listeners(key), function(callback) {
-      callback(value);
-    });
-  };
-
-  fn.register = function(key, callback) {
-    this.listeners(key).push(callback);
-  };
-
-  fn.listeners = function(key) {
-    if (typeof this.watchs[key] === "undefined") {
-      this.watchs[key] = [];
+  class NotifierService {
+    constructor() {
+      this.watchs = {};
     }
-    return this.watchs[key];
-  };
+
+    notify(key, value) {
+      _.each(this.listeners(key), function(callback) {
+        callback(value);
+      });
+    }
+
+    register(key, callback) {
+      this.listeners(key).push(callback);
+    }
+
+    listeners(key) {
+      if (typeof this.watchs[key] === "undefined") {
+        this.watchs[key] = [];
+      }
+      return this.watchs[key];
+    }
+  }
 
   Cyberhawk.NotifierServiceFactory = function() {
     return new NotifierService();
@@ -265,7 +266,6 @@
     BindedHttpService, "http", "get", "post", "delete"
   );
 
-
   function watch(original) {
     this.controller.initRequest();
     var promisse = original();
@@ -297,36 +297,37 @@
 // requester.js
 //REQUESTER
 (function(_, angular, Cyberhawk, querystring) {
-  function RequesterService(path, savePath, $http) {
-    this.path = path;
-    this.savePath = savePath;
-    this.http = $http;
+  var module = angular.module("cyberhawk/requester", ["binded_http"]);
 
-    _.bind(this.request, this);
-  }
+  class RequesterService {
+    constructor(path, savePath, $http) {
+      this.path = path;
+      this.savePath = savePath;
+      this.http = $http;
 
-  var fn = RequesterService.prototype,
-      module = angular.module("cyberhawk/requester", ["binded_http"]);
-
-  fn.bind = function(controller) {
-    this.http.bind(controller);
-  };
-
-  fn.request = function(callback) {
-    return this.http.get(this.path);
-  };
-
-  fn.saveRequest = function(data) {
-    if (this.path.match(/new.json$/)) {
-      return this.http.post(this.savePath, data);
-    } else {
-      return this.http.patch(this.savePath, data);
+      _.bind(this.request, this);
     }
-  };
 
-  fn.deleteRequest = function(id) {
-    return this.http.delete(this.path.replace(/(\.json)?$/, "/" + id + ".json"));
-  };
+    bind(controller) {
+      this.http.bind(controller);
+    }
+
+    request(callback) {
+      return this.http.get(this.path);
+    }
+
+    saveRequest(data) {
+      if (this.path.match(/new.json$/)) {
+        return this.http.post(this.savePath, data);
+      } else {
+        return this.http.patch(this.savePath, data);
+      }
+    }
+
+    deleteRequest(id) {
+      return this.http.delete(this.path.replace(/(\.json)?$/, "/" + id + ".json"));
+    }
+  }
 
   Cyberhawk.RequesterService = RequesterService;
 
@@ -336,8 +337,8 @@
 
   RequesterServiceBuilder.prototype.build = function($location) {
     var query = querystring.encode($location.$$search),
-        path = $location.$$path + ".json?" + query,
-        savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+      path = $location.$$path + ".json?" + query,
+      savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
 
     return new RequesterService(path, savePath, this.http);
   };
