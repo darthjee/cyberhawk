@@ -297,36 +297,37 @@
 // requester.js
 //REQUESTER
 (function(_, angular, Cyberhawk, querystring) {
-  function RequesterService(path, savePath, $http) {
-    this.path = path;
-    this.savePath = savePath;
-    this.http = $http;
+  class RequesterService {
+    constructor(path, savePath, $http) {
+      this.path = path;
+      this.savePath = savePath;
+      this.http = $http;
 
-    _.bind(this.request, this);
+      _.bind(this.request, this);
+    }
+
+    bind(controller) {
+      this.http.bind(controller);
+    }
+
+    request(callback) {
+      return this.http.get(this.path);
+    }
+
+    saveRequest(data) {
+      if (this.path.match(/new.json$/)) {
+        return this.http.post(this.savePath, data);
+      } else {
+        return this.http.patch(this.savePath, data);
+      }
+    }
+
+    deleteRequest(id) {
+      return this.http.delete(this.path.replace(/(\.json)?$/, "/" + id + ".json"));
+    }
   }
 
-  var fn = RequesterService.prototype,
-      module = angular.module("cyberhawk/requester", ["binded_http"]);
-
-  fn.bind = function(controller) {
-    this.http.bind(controller);
-  };
-
-  fn.request = function(callback) {
-    return this.http.get(this.path);
-  };
-
-  fn.saveRequest = function(data) {
-    if (this.path.match(/new.json$/)) {
-      return this.http.post(this.savePath, data);
-    } else {
-      return this.http.patch(this.savePath, data);
-    }
-  };
-
-  fn.deleteRequest = function(id) {
-    return this.http.delete(this.path.replace(/(\.json)?$/, "/" + id + ".json"));
-  };
+  var module = angular.module("cyberhawk/requester", ["binded_http"]);
 
   Cyberhawk.RequesterService = RequesterService;
 
@@ -336,8 +337,8 @@
 
   RequesterServiceBuilder.prototype.build = function($location) {
     var query = querystring.encode($location.$$search),
-        path = $location.$$path + ".json?" + query,
-        savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+      path = $location.$$path + ".json?" + query,
+      savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
 
     return new RequesterService(path, savePath, this.http);
   };
