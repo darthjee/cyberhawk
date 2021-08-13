@@ -93,16 +93,12 @@
       return i === 0 || e !== array[i-1];
     });
   };
-})(window._);
+}(window._));
 
 // paginator.js
 //PAGINATOR
-(function(_, angular, Cyberhawk, undefined) {
+(function(_, angular, Cyberhawk) {
   var module = angular.module("cyberhawk/paginator", []);
-
-  function PaginatorFactory() {
-    return Paginator;
-  }
 
   class Paginator {
     constructor(blockSize, pages, current) {
@@ -138,14 +134,18 @@
     }
   }
 
-  Paginator.block_size = 3;
+  Paginator.blockSize = 3;
   Paginator.build = function(data) {
-    return new Paginator(this.block_size, data.pages, data.page).build();
+    return new Paginator(this.blockSize, data.pages, data.page).build();
   };
+
+  function PaginatorFactory() {
+    return Paginator;
+  }
 
   Cyberhawk.Paginator = Paginator;
   module.factory("cyberhawk_paginator", [PaginatorFactory]);
-})(window._, window.angular, window.Cyberhawk);
+}(window._, window.angular, window.Cyberhawk));
 
 
 // pagination.js
