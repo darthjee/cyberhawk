@@ -86,15 +86,80 @@
   ]);
 }(window.angular, window));
 
+// underscore_ext.js
+(function(_) {
+  _.squeeze = function(array){
+    return _.select(array, function(e, i) {
+      return i === 0 || e !== array[i-1];
+    });
+  };
+}(window._));
+
+// paginator.js
+//PAGINATOR
+(function(_, angular, Cyberhawk) {
+  var module = angular.module("cyberhawk/paginator", []);
+
+  class Paginator {
+    constructor(blockSize, pages, current) {
+      this.blockSize = blockSize;
+      this.pages = pages;
+      this.current = current;
+    }
+
+    build() {
+      var list, that = this;
+
+      list = _.map(new Array(this.pages), function(_, index) {
+        var page =  index + 1;
+        if (that.isPageListable(page)) {
+          return page;
+        }
+        return null;
+      });
+
+      return _.squeeze(list);
+    }
+
+    isPageListable(page) {
+      var total = this.pages,
+        current = this.current,
+        blockSize = this.blockSize;
+
+      return page <= blockSize ||
+             page > total - blockSize ||
+             Math.abs(page - current) < blockSize ||
+             (Math.abs(page - current) <= blockSize && page <= (blockSize+1)) ||
+             (Math.abs(page - current) <= blockSize && page >= total - blockSize);
+    }
+  }
+
+  Paginator.blockSize = 3;
+  Paginator.build = function(data) {
+    return new Paginator(this.blockSize, data.pages, data.page).build();
+  };
+
+  function PaginatorFactory() {
+    return Paginator;
+  }
+
+  Cyberhawk.Paginator = Paginator;
+  module.factory("cyberhawk_paginator", [PaginatorFactory]);
+}(window._, window.angular, window.Cyberhawk));
+
+
 // pagination.js
 //PAGINATION
 (function(_, angular, Cyberhawk) {
-  var module = angular.module("cyberhawk/pagination", []);
+  var module = angular.module("cyberhawk/pagination", [
+    "cyberhawk/paginator"
+  ]);
 
   class PaginationService {
-    constructor() {
-      this.pages = 1;
-      this.page = 1;
+    constructor(builder) {
+      this.pages   = 1;
+      this.page    = 1;
+      this.builder = builder;
     }
 
     parse(response) {
@@ -102,26 +167,31 @@
         this.pages   = Number.parseInt(response.headers("pages"));
         this.page    = Number.parseInt(response.headers("page"));
         this.perPage = Number.parseInt(response.headers("per_page"));
+
+        this.pagination = this.builder.build(this);
       }
     }
   }
 
   Cyberhawk.PaginationService = PaginationService;
 
-  function PaginationServiceFactory() {
-    return new PaginationService();
+  function PaginationServiceFactory(builder) {
+    return new PaginationService(builder);
   }
 
   module.service("cyberhawk_pagination", [
+    "cyberhawk_paginator",
     PaginationServiceFactory
   ]);
+
+  Cyberhawk.PaginationService = PaginationService;
 }(window._, window.angular, window.Cyberhawk));
 
 
 // controller.js
 (function(_, angular, Cyberhawk) {
-  function Controller(builder, notifier, pagination, $location, $timeout) {
-    this.construct(builder.build($location), notifier, pagination, $location, $timeout);
+  function Controller(builder, notifier, $location, $timeout, pagination) {
+    this.construct(builder.build($location), notifier, $location, $timeout, pagination);
   }
 
   var fn = Controller.prototype,
@@ -130,7 +200,7 @@
         "cyberhawk/pagination"
       ]);
 
-  fn.construct = function(requester, notifier, pagination, $location, $timeout) {
+  fn.construct = function(requester, notifier, $location, $timeout, pagination) {
     this.requester = requester;
     this.notifier = notifier;
     this.pagination = pagination;
@@ -154,7 +224,9 @@
   };
 
   fn._setPagination = function(response) {
-    this.pagination.parse(response);
+    if (this.pagination) {
+      this.pagination.parse(response);
+    }
   };
 
   fn.save = function() {
@@ -187,9 +259,9 @@
   app.controller("Cyberhawk.Controller", [
     "cyberhawk_requester",
     "cyberhawk_notifier",
-    "cyberhawk_pagination",
     "$location",
     "$timeout",
+    "cyberhawk_pagination",
     Controller
   ]);
 
