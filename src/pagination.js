@@ -1,11 +1,14 @@
 //PAGINATION
 (function(_, angular, Cyberhawk) {
-  var module = angular.module("cyberhawk/pagination", []);
+  var module = angular.module("cyberhawk/pagination", [
+    "cyberhawk/paginator"
+  ]);
 
   class PaginationService {
-    constructor() {
-      this.pages = 1;
-      this.page = 1;
+    constructor(builder) {
+      this.pages   = 1;
+      this.page    = 1;
+      this.builder = builder;
     }
 
     parse(response) {
@@ -14,18 +17,19 @@
         this.page    = Number.parseInt(response.headers("page"));
         this.perPage = Number.parseInt(response.headers("per_page"));
 
-        this.pagination = Cyberhawk.Paginator.from_data(3, this).build();
+        this.pagination = this.builder.from_data(3, this).build();
       }
     }
   }
 
   Cyberhawk.PaginationService = PaginationService;
 
-  function PaginationServiceFactory() {
-    return new PaginationService();
+  function PaginationServiceFactory(builder) {
+    return new PaginationService(builder);
   }
 
   module.service("cyberhawk_pagination", [
+    "cyberhawk_paginator",
     PaginationServiceFactory
   ]);
 }(window._, window.angular, window.Cyberhawk));
