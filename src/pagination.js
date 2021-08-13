@@ -9,9 +9,11 @@
     }
 
     parse(response) {
-      this.pages    = response.headers('pages');
-      this.page     = response.headers('page');
-      this.per_page = response.headers('per_page');
+      if (response.headers('pages')) {
+        this.pages    = Number.parseInt(response.headers('pages'));
+        this.page     = Number.parseInt(response.headers('page'));
+        this.per_page = Number.parseInt(response.headers('per_page'));
+      }
     }
   }
 
