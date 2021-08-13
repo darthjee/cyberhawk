@@ -217,7 +217,9 @@
   };
 
   fn._setPagination = function(response) {
-    this.pagination.parse(response);
+    if (this.pagination) {
+      this.pagination.parse(response);
+    }
   };
 
   fn.save = function() {
