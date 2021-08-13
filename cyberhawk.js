@@ -86,6 +86,15 @@
   ]);
 }(window.angular, window));
 
+// underscore_ext.js
+(function(_) {
+  _.squeeze = function(array){
+    return _.select(array, function(e, i) {
+      return i === 0 || e !== array[i-1];
+    });
+  };
+})(window._);
+
 // paginator.js
 //PAGINATOR
 (function(_, angular, Cyberhawk, undefined) {
@@ -154,7 +163,7 @@
         this.page    = Number.parseInt(response.headers("page"));
         this.perPage = Number.parseInt(response.headers("per_page"));
 
-        this.pagination = new Cyberhawk.Paginator(3, this).build();
+        this.pagination = Cyberhawk.Paginator.from_data(3, this).build();
         console.info(this.pagination);
       }
     }
