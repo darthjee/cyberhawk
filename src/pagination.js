@@ -32,5 +32,7 @@
     "cyberhawk_paginator",
     PaginationServiceFactory
   ]);
+
+  Cyberhawk.PaginationService = PaginationService;
 }(window._, window.angular, window.Cyberhawk));
 
