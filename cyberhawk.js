@@ -183,8 +183,8 @@
 
 // controller.js
 (function(_, angular, Cyberhawk) {
-  function Controller(builder, notifier, pagination, $location, $timeout) {
-    this.construct(builder.build($location), notifier, pagination, $location, $timeout);
+  function Controller(builder, notifier, $location, $timeout, pagination) {
+    this.construct(builder.build($location), notifier, $location, $timeout, pagination);
   }
 
   var fn = Controller.prototype,
@@ -193,7 +193,7 @@
         "cyberhawk/pagination"
       ]);
 
-  fn.construct = function(requester, notifier, pagination, $location, $timeout) {
+  fn.construct = function(requester, notifier, $location, $timeout, pagination) {
     this.requester = requester;
     this.notifier = notifier;
     this.pagination = pagination;
@@ -252,9 +252,9 @@
   app.controller("Cyberhawk.Controller", [
     "cyberhawk_requester",
     "cyberhawk_notifier",
-    "cyberhawk_pagination",
     "$location",
     "$timeout",
+    "cyberhawk_pagination",
     Controller
   ]);
 
