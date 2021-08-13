@@ -138,8 +138,9 @@
     }
   }
 
-  Paginator.from_data = function(block_size, data) {
-    return new Paginator(block_size, data.pages, data.page);
+  Paginator.block_size = 3;
+  Paginator.build = function(data) {
+    return new Paginator(this.block_size, data.pages, data.page).build();
   };
 
   Cyberhawk.Paginator = Paginator;
@@ -167,7 +168,7 @@
         this.page    = Number.parseInt(response.headers("page"));
         this.perPage = Number.parseInt(response.headers("per_page"));
 
-        this.pagination = this.builder.from_data(3, this).build();
+        this.pagination = this.builder.build(this);
       }
     }
   }
