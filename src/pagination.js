@@ -13,6 +13,9 @@
         this.pages   = Number.parseInt(response.headers("pages"));
         this.page    = Number.parseInt(response.headers("page"));
         this.perPage = Number.parseInt(response.headers("per_page"));
+
+        this.pagination = new Cyberhawk.Paginator(3, this).build();
+        console.info(this.pagination);
       }
     }
   }
