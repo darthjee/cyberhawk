@@ -337,7 +337,7 @@
   }
 
   _.delegate(
-    BindedHttpService, "http", "get", "post", "delete"
+    BindedHttpService, "http", "get", "post", "patch", "delete"
   );
 
   function watch(original) {
