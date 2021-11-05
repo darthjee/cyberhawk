@@ -391,7 +391,7 @@
     }
 
     saveRequest(data) {
-      if (this.path.match(/new.json$/)) {
+      if (this.path.match(/new.json(\?.*)?$/)) {
         return this.http.post(this.savePath, data);
       } else {
         return this.http.patch(this.savePath, data);
