@@ -37,6 +37,9 @@ app.controller("Simulation.NewController", [
 
 ```
 
+### requester
+Requester is used with the controller, being able to easily request data or post data to be saved
+
 ### binded_http
 
 binds an http requester to a controller
