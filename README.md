@@ -12,7 +12,7 @@ upon entering `http://myurl.com#/angular/path` the controller will request data 
 
 ```javascript
 var app = angular.module("my_controller", [
-  "some_requester",
+  "cyberhawk/requester",
   "cyberhawk/controller",
   "cyberhawk/notifier",
 ]);
@@ -32,7 +32,7 @@ fn.payload = function() {
 };
 
 app.controller("Simulation.NewController", [
-  "some_requester", "cyberhawk_notifier", "$location",
+  "cyberhawk/requester", "cyberhawk_notifier", "$location",
   Controller
 ]);
 
