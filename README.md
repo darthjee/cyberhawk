@@ -8,7 +8,12 @@ This package adds several ready to use classes for an Angular2 project
 
 Controller already knows how to request for the data based on the URL
 
-upon entering `http://myurl.com#/angular/path` the controller will request data from `http://myurl.com/angular/path.json`
+Upon entering `http://myurl.com#/angular/path` the controller will request data from `http://myurl.com/angular/path.json`
+
+For pages that show a form, the controller will have an attribute `data` which will contain the data of the form,
+and a method `save` so that the form can be submitted
+
+For pages that show content, the controller will load the content into the `data` attribute
 
 ```javascript
 var app = angular.module("my_controller", [
@@ -24,12 +29,6 @@ function Controller(builder, notifier, $location) {
 var fn = Controller.prototype;
 
 _.extend(fn, Cyberhawk.Controller.prototype);
-
-fn.payload = function() {
-  return {
-    data: this.data
-  }
-};
 
 app.controller("Simulation.NewController", [
   "cyberhawk/requester", "cyberhawk_notifier", "$location",
