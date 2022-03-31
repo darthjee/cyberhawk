@@ -6,8 +6,35 @@ This package adds several ready to use classes for an Angular2 project
 
 ### controller
 
-```javascript
+Controller already knows how to request for the data based on the URL
 
+upon entering `http://myurl.com#/angular/path` the controller will request data from `http://myurl.com/angular/path.json`
+
+```javascript
+var app = angular.module("my_controller", [
+  "some_requester",
+  "cyberhawk/controller",
+  "cyberhawk/notifier",
+]);
+
+function Controller(builder, notifier, $location) {
+  this.construct(builder.build($location), notifier, $location);
+}
+
+var fn = Controller.prototype;
+
+_.extend(fn, Cyberhawk.Controller.prototype);
+
+fn.payload = function() {
+  return {
+    data: this.data
+  }
+};
+
+app.controller("Simulation.NewController", [
+  "some_requester", "cyberhawk_notifier", "$location",
+  Controller
+]);
 
 ```
 
