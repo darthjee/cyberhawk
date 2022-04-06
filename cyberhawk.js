@@ -248,7 +248,7 @@
   };
 
   fn._goIndex = function() {
-    this.location.path(this.location.$$path.replace(/(\w*\/edit|new)/, ""));
+    this.location.path(this.location.$$path.replace(/\/(edit|new)$/, ""));
   };
 
   fn.delete = function(id) {
