@@ -235,7 +235,11 @@
           this.pathExtensions[path] = {};
         }
 
-        this.pathExtensions[path][name] = func;
+        if (typeof name == "string") {
+          this.pathExtensions[path][name] = func
+        } else {
+          _.extend(this.pathExtensions[path], name);
+        }
       },
 
       extensionFor: function(path) {
