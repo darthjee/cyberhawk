@@ -230,9 +230,26 @@
     },
 
     ExtensionMethods = {
+      withPath: function(path, name, func) {
+        if (!pathExtensions[path]) {
+          pathExtensions[path] = {};
+        }
+
+        pathExtensions[path][name] = func;
+      },
+
+      extensionFor: function(path) {
+        return this.pathExtensions[path] || {};
+      },
+
+      extend: function(path, controller) {
+        _.extend(controller, this.extensionFor(path));
+      },
+
+      pathExtensions: {}
     };
 
-    _.extend(Controller, HooksMethods, ExtensionMethods);
+  _.extend(Controller, HooksMethods, ExtensionMethods);
 
   _.extend(fn, {
     construct: function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
@@ -244,6 +261,7 @@
       this.routeParams = route.current.pathParams;
       this.route = route.current.$$route.route
 
+      this.constructor.extend(this.route, this);
       _.bindAll(this, "execute", "_setData", "save", "request", "_goIndex", "_error");
       this.requester.bind(this);
       this.request();
