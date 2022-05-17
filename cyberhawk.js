@@ -203,6 +203,14 @@
 
     HooksMethods = {
       on: function(path, event, func) {
+        if (path.constructor == Array) {
+          let klass = this;
+
+          return _.each(path, function(route) {
+            this.on(route, event, func);
+          });
+        }
+
         if (!this.pathHooks[path]) {
           this.pathHooks[path] = {};
         }
