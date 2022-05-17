@@ -1,6 +1,6 @@
 (function(_, angular, Cyberhawk) {
-  function Controller(builder, notifier, $location, $timeout, pagination) {
-    this.construct(builder.build($location), notifier, $location, $timeout, pagination);
+  function Controller() {
+    this.construct.apply(this, arguments);
   }
 
   var fn = Controller.prototype,
@@ -9,8 +9,8 @@
         "cyberhawk/pagination"
       ]);
 
-  fn.construct = function(requester, notifier, $location, $timeout, pagination, routeParams) {
-    this.requester = requester;
+  fn.construct = function(requesterBuilder, notifier, $location, $timeout, pagination, routeParams) {
+    this.requester = requesterBuilder.build($location);
     this.notifier = notifier;
     this.pagination = pagination;
     this.location = $location;

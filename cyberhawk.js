@@ -190,8 +190,8 @@
 
 // controller.js
 (function(_, angular, Cyberhawk) {
-  function Controller(builder, notifier, $location, $timeout, pagination) {
-    this.construct(builder.build($location), notifier, $location, $timeout, pagination);
+  function Controller() {
+    this.construct.apply(this, arguments);
   }
 
   var fn = Controller.prototype,
