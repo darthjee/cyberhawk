@@ -4,15 +4,15 @@
   }
 
   Controller.on = function(path, event, func) {
-    if (!this.pathhooks[path]) {
-      this.pathhooks[path] = {};
+    if (!this.pathHooks[path]) {
+      this.pathHooks[path] = {};
     }
 
-    if (!this.pathhooks[path][event]) {
-      this.pathhooks[path][event] = [];
+    if (!this.pathHooks[path][event]) {
+      this.pathHooks[path][event] = [];
     }
 
-    this.pathhooks[path][event].push(func);
+    this.pathHooks[path][event].push(func);
   };
 
   Controller.pathHooksFor = function(path, event) {
@@ -53,7 +53,7 @@
     var that = this;
 
     _.each(functions, function(func) {
-      func.apply(this);
+      func.apply(that);
     });
   }
 

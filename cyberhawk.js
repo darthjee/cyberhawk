@@ -82,7 +82,8 @@
   global.Cyberhawk = {};
 
   angular.module("cyberhawk", [
-    "cyberhawk/requester", "cyberhawk/controller"
+    "cyberhawk/requester", "cyberhawk/controller",
+    "cyberhawk/config"
   ]);
 }(window.angular, window));
 
@@ -195,15 +196,15 @@
   }
 
   Controller.on = function(path, event, func) {
-    if (!this.pathhooks[path]) {
-      this.pathhooks[path] = {};
+    if (!this.pathHooks[path]) {
+      this.pathHooks[path] = {};
     }
 
-    if (!this.pathhooks[path][event]) {
-      this.pathhooks[path][event] = [];
+    if (!this.pathHooks[path][event]) {
+      this.pathHooks[path][event] = [];
     }
 
-    this.pathhooks[path][event].push(func);
+    this.pathHooks[path][event].push(func);
   };
 
   Controller.pathHooksFor = function(path, event) {
@@ -244,7 +245,7 @@
     var that = this;
 
     _.each(functions, function(func) {
-      func.apply(this);
+      func.apply(that);
     });
   }
 
@@ -465,4 +466,31 @@
     RequesterServiceFactory
   ]);
 }(window._, window.angular, window.Cyberhawk, window.querystring));
+
+// config.js
+(function(_, angular, Cyberhawk) {
+  class Config {
+    constructor() {
+      this.controller = Cyberhawk.Controller;
+    }
+  }
+
+  // Old prototype style, can't get rid of it :(
+  function CyberhawkProvider() {
+    _.bindAll(this, '$get');
+  };
+
+  var module = angular.module('cyberhawk/config', []),
+    fn = CyberhawkProvider.prototype;
+
+  fn.$get = function() {
+    return this.config || this._build();
+  };
+
+  fn._build = function() {
+    return this.config = new Config();
+  };
+
+  module.provider('cyberhawk', CyberhawkProvider);
+}(window._, window.angular, window.Cyberhawk));
 
