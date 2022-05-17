@@ -232,7 +232,6 @@
     this.pagination = pagination;
     this.location = $location;
     this.$timeout = $timeout;
-    this.route = routeParams;
     this.routeParams = route.current.pathParams;
     this.route = route.current.$$route.route
 
