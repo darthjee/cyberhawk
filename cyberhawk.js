@@ -82,7 +82,8 @@
   global.Cyberhawk = {};
 
   angular.module("cyberhawk", [
-    "cyberhawk/requester", "cyberhawk/controller"
+    "cyberhawk/requester", "cyberhawk/controller",
+    "cyberhawk/config"
   ]);
 }(window.angular, window));
 
@@ -195,67 +196,153 @@
   }
 
   var fn = Controller.prototype,
-      app = angular.module("cyberhawk/controller", [
-        "cyberhawk/notifier", "cyberhawk/requester",
-        "cyberhawk/pagination"
-      ]);
+    app = angular.module("cyberhawk/controller", [
+      "cyberhawk/notifier", "cyberhawk/requester",
+      "cyberhawk/pagination"
+    ]),
 
-  fn.construct = function(requesterBuilder, notifier, $location, $timeout, pagination, routeParams) {
-    this.requester = requesterBuilder.build($location);
-    this.notifier = notifier;
-    this.pagination = pagination;
-    this.location = $location;
-    this.$timeout = $timeout;
-    this.route = routeParams;
+    HooksMethods = {
+      on: function(path, event, func) {
+        if (path.constructor == Array) {
+          let klass = this;
 
-    _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
-    this.requester.bind(this);
-    this.request();
-  };
+          return _.each(path, function(route) {
+            this.on(route, event, func);
+          });
+        }
 
-  fn.request = function() {
-    var promise = this.requester.request();
-    promise.then(this._setData);
-  };
+        if (!this.pathHooks[path]) {
+          this.pathHooks[path] = {};
+        }
 
-  fn._setData = function(response) {
-    this._setPagination(response);
-    this.data = response.data;
-    this.loaded = true;
-  };
+        if (!this.pathHooks[path][event]) {
+          this.pathHooks[path][event] = [];
+        }
 
-  fn._setPagination = function(response) {
-    if (this.pagination) {
-      this.pagination.parse(response);
+        this.pathHooks[path][event].push(func);
+      },
+
+      pathHooksFor: function(path, event) {
+        if (!this.pathHooks[path]) {
+          return [];
+        }
+
+        if (!this.pathHooks[path][event]) {
+          return [];
+        }
+
+        return this.pathHooks[path][event];
+      },
+
+      pathHooks: {}
+    },
+
+    ExtensionMethods = {
+      withPath: function(path, name, func) {
+        if (!this.pathExtensions[path]) {
+          this.pathExtensions[path] = {};
+        }
+
+        if (typeof name == "string") {
+          this.pathExtensions[path][name] = func
+        } else {
+          _.extend(this.pathExtensions[path], name);
+        }
+      },
+
+      extensionFor: function(path) {
+        return this.pathExtensions[path] || {};
+      },
+
+      extend: function(path, controller) {
+        var methods = this.extensionFor(path);
+
+        _.extend(controller, methods);
+
+        for(method in methods) {
+          _.bindAll(controller, method)
+        }
+      },
+
+      pathExtensions: {}
+    };
+
+  _.extend(Controller, HooksMethods, ExtensionMethods);
+
+  _.extend(fn, {
+    construct: function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
+      this.requester = requesterBuilder.build($location);
+      this.notifier = notifier;
+      this.pagination = pagination;
+      this.location = $location;
+      this.$timeout = $timeout;
+      this.routeParams = route.current.pathParams;
+      this.route = route.current.$$route.route
+
+      this.constructor.extend(this.route, this);
+      _.bindAll(this, "execute", "_setData", "save", "request", "_goIndex", "_error");
+      this.requester.bind(this);
+      this.request();
+    },
+
+    execute: function(functions) {
+      var that = this;
+
+      _.each(functions, function(func) {
+        if (typeof func == "string") {
+          that[func]();
+        } else {
+          func.apply(that);
+        }
+      });
+    },
+
+    request: function() {
+      var promise = this.requester.request();
+      promise.then(this._setData);
+
+      this.execute(Controller.pathHooksFor(this.route, 'request'));
+    },
+
+    _setData: function(response) {
+      this._setPagination(response);
+      this.data = response.data;
+      this.loaded = true;
+    },
+
+    _setPagination: function(response) {
+      if (this.pagination) {
+        this.pagination.parse(response);
+      }
+    },
+
+    save: function() {
+      var promise = this.requester.saveRequest(this.payload());
+
+      promise.then(this._setData);
+      promise.then(this._goIndex);
+      promise.error(this._error);
+    },
+
+    payload: function() {
+      return this.data;
+    },
+
+    _error: function(data, responseStatus) {
+      if(responseStatus === 422) {
+        this.data = data;
+      }
+    },
+
+    _goIndex: function() {
+      this.location.path(this.location.$$path.replace(/\/(edit|new)$/, ""));
+    },
+
+    delete: function(id) {
+      var promise = this.requester.deleteRequest(id);
+      promise.then(this.request);
     }
-  };
-
-  fn.save = function() {
-    var promise = this.requester.saveRequest(this.payload());
-
-    promise.then(this._setData);
-    promise.then(this._goIndex);
-    promise.error(this._error);
-  };
-
-  fn.payload = function() {
-    return this.data;
-  };
-
-  fn._error = function(data, responseStatus) {
-    if(responseStatus === 422) {
-      this.data = data;
-    }
-  };
-
-  fn._goIndex = function() {
-    this.location.path(this.location.$$path.replace(/\/(edit|new)$/, ""));
-  };
-
-  fn.delete = function(id) {
-    var promise = this.requester.deleteRequest(id);
-    promise.then(this.request);
-  };
+  });
 
   app.controller("Cyberhawk.Controller", [
     "cyberhawk_requester",
@@ -263,7 +350,7 @@
     "$location",
     "$timeout",
     "cyberhawk_pagination",
-    "$routeParams",
+    "$route",
     Controller
   ]);
 
@@ -311,11 +398,23 @@
   class Controller {}
 
   _.extend(Controller.prototype,{
-    initRequest() {
-      this.ongoing = true;
+    initRequest(promisse) {
+      if (!this.requests) {
+        this.requests = [];
+      }
+
+      this.requests.push(promisse);
+
+      this.finishRequest();
     },
     finishRequest() {
-      this.ongoing = false;
+      this.requests = _.select(this.requests, function(promisse) {
+        return promisse.$$state.status == 0
+      });
+
+      if (this.requests.length == 0) {
+        this.ongoing = false;
+      }
     }
   });
 
@@ -343,10 +442,11 @@
   );
 
   function watch(original) {
-    this.controller.initRequest();
     var promisse = original();
+    
+    this.controller.initRequest(promisse);
 
-    promisse.finally(this.controller.finishRequest);
+    promisse.finally(this.controller.finishRequest)
     return promisse;
   }
 
@@ -428,4 +528,31 @@
     RequesterServiceFactory
   ]);
 }(window._, window.angular, window.Cyberhawk, window.querystring));
+
+// config.js
+(function(_, angular, Cyberhawk) {
+  class Config {
+    constructor() {
+      this.controller = Cyberhawk.Controller;
+    }
+  }
+
+  // Old prototype style, can't get rid of it :(
+  function CyberhawkProvider() {
+    _.bindAll(this, '$get');
+  };
+
+  var module = angular.module('cyberhawk/config', []),
+    fn = CyberhawkProvider.prototype;
+
+  fn.$get = function() {
+    return this.config || this._build();
+  };
+
+  fn._build = function() {
+    return this.config = new Config();
+  };
+
+  module.provider('cyberhawk', CyberhawkProvider);
+}(window._, window.angular, window.Cyberhawk));
 

@@ -4,11 +4,23 @@
   class Controller {}
 
   _.extend(Controller.prototype,{
-    initRequest() {
-      this.ongoing = true;
+    initRequest(promisse) {
+      if (!this.requests) {
+        this.requests = [];
+      }
+
+      this.requests.push(promisse);
+
+      this.finishRequest();
     },
     finishRequest() {
-      this.ongoing = false;
+      this.requests = _.select(this.requests, function(promisse) {
+        return promisse.$$state.status == 0
+      });
+
+      if (this.requests.length == 0) {
+        this.ongoing = false;
+      }
     }
   });
 
@@ -36,10 +48,11 @@
   );
 
   function watch(original) {
-    this.controller.initRequest();
     var promisse = original();
+    
+    this.controller.initRequest(promisse);
 
-    promisse.finally(this.controller.finishRequest);
+    promisse.finally(this.controller.finishRequest)
     return promisse;
   }
 
