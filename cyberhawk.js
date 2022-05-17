@@ -207,7 +207,7 @@
           let klass = this;
 
           return _.each(path, function(route) {
-            this.on(route, event, func);
+            klass.on(route, event, func);
           });
         }
 
@@ -239,6 +239,14 @@
 
     ExtensionMethods = {
       withPath: function(path, name, func) {
+        if (path.constructor == Array) {
+          let klass = this;
+
+          return _.each(path, function(route) {
+            klass.withPath(route, name, func);
+          });
+        }
+
         if (!this.pathExtensions[path]) {
           this.pathExtensions[path] = {};
         }
