@@ -231,11 +231,11 @@
 
     ExtensionMethods = {
       withPath: function(path, name, func) {
-        if (!pathExtensions[path]) {
-          pathExtensions[path] = {};
+        if (!this.pathExtensions[path]) {
+          this.pathExtensions[path] = {};
         }
 
-        pathExtensions[path][name] = func;
+        this.pathExtensions[path][name] = func;
       },
 
       extensionFor: function(path) {
