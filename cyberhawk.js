@@ -451,7 +451,7 @@
 
   function watch(original) {
     var promisse = original();
-    
+
     this.controller.initRequest(promisse);
 
     promisse.finally(this.controller.finishRequest)
@@ -536,6 +536,120 @@
     RequesterServiceFactory
   ]);
 }(window._, window.angular, window.Cyberhawk, window.querystring));
+
+// filters/dig.js
+(function(angular, _) {
+  class Digger {
+    constructor(input, keys) {
+      this.input = input;
+      this.keys = keys.split(".");
+    }
+
+    dig() {
+      return _.reduce(this.keys, this.reduce, this.input);
+    }
+
+    reduce(result, key) {
+      return result && result[key];
+    }
+  }
+
+  Digger.dig = function(input, keys) {
+    return new Digger(input, keys).dig();
+  };
+
+  angular
+    .module("cyberhawk")
+    .filter("dig", function() { return Digger.dig; });
+}(window.angular, window._));
+
+// filters/percentage.js
+(function(angular, _) {
+  class Percentage {
+    constructor(input) {
+      this.input = input;
+    }
+
+    toString() {
+      if (this.input) {
+        return "" + (this.input * 100).toFixed(2) + " %";
+      } else {
+        return "0 %";
+      }
+    }
+  }
+
+  Percentage.parse = function(input) {
+    return new Percentage(input).toString();
+  };
+
+  angular
+    .module("cyberhawk")
+    .filter("percentage", function() {
+      return Percentage.parse;
+    });
+}(window.angular, window._));
+
+
+// filters/select_options.js
+(function(angular, _) {
+  class Finder {
+    constructor(input, mappings, key) {
+      this.input = input;
+      this.mappings = mappings;
+      this.key = key;
+    }
+
+    find() {
+      var input = this.input,
+          key = this.key;
+
+      if (input === null) {
+        return null;
+      }
+
+      return _.find(this.mappings, function(object) {
+        return object[key] === input;
+      });
+    }
+  }
+
+  Finder.find = function(input, mappings, key) {
+    return new Finder(input, mappings, key).find();
+  };
+
+  angular
+    .module("cyberhawk")
+    .filter("select_transformer", function() {
+      return Finder.find;
+    });
+}(window.angular, window._));
+
+// filters/string.js
+(function(angular) {
+  angular
+    .module("cyberhawk")
+    .filter("string", function() {
+      return function(input) { 
+        return input.toString();
+      };
+    });
+})(window.angular);
+
+// filters/number.js
+(function(angular) {
+  angular
+    .module("cyberhawk")
+    .filter("number", function() {
+      return function(input) {
+        if (!input) {
+          return;
+        }
+
+        return parseInt(input);
+      };
+    });
+})(window.angular);
 
 // config.js
 (function(_, angular, Cyberhawk) {

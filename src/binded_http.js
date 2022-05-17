@@ -49,7 +49,7 @@
 
   function watch(original) {
     var promisse = original();
-    
+
     this.controller.initRequest(promisse);
 
     promisse.finally(this.controller.finishRequest)
