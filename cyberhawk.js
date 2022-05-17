@@ -200,12 +200,13 @@
         "cyberhawk/pagination"
       ]);
 
-  fn.construct = function(requester, notifier, $location, $timeout, pagination) {
-    this.requester = requester;
+  fn.construct = function(requesterBuilder, notifier, $location, $timeout, pagination, routeParams) {
+    this.requester = requesterBuilder.build($location);
     this.notifier = notifier;
     this.pagination = pagination;
     this.location = $location;
     this.$timeout = $timeout;
+    this.route = routeParams;
 
     _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
     this.requester.bind(this);
@@ -262,6 +263,7 @@
     "$location",
     "$timeout",
     "cyberhawk_pagination",
+    "$routeParams",
     Controller
   ]);
 
