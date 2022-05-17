@@ -271,7 +271,11 @@
       var that = this;
 
       _.each(functions, function(func) {
-        func.apply(that);
+        if (typeof func == "string") {
+          that[func]();
+        } else {
+          func.apply(that);
+        }
       });
     },
 
