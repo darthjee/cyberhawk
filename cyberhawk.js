@@ -246,7 +246,6 @@
         });
       },
 
-
       pathHooks: {}
     },
 
@@ -317,6 +316,7 @@
       this._setPagination(response);
       this.data = response.data;
       this.loaded = true;
+      this.constructor.trigger(this, this.route, 'loaded');
     },
 
     _setPagination: function(response) {
