@@ -3,6 +3,32 @@
     this.construct.apply(this, arguments);
   }
 
+  Controller.on = function(path, event, func) {
+    if (!this.pathhooks[path]) {
+      this.pathhooks[path] = {};
+    }
+
+    if (!this.pathhooks[path][event]) {
+      this.pathhooks[path][event] = [];
+    }
+
+    this.pathhooks[path][event].push(func);
+  };
+
+  Controller.pathHooksFor = function(path, event) {
+    if (!this.pathHooks[path]) {
+      return [];
+    }
+
+    if (!this.pathHooks[path][event]) {
+      return [];
+    }
+
+    return this.pathHooks[path][event];
+  };
+
+  Controller.pathHooks = {};
+  
   var fn = Controller.prototype,
       app = angular.module("cyberhawk/controller", [
         "cyberhawk/notifier", "cyberhawk/requester",

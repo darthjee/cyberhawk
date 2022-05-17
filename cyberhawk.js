@@ -194,19 +194,47 @@
     this.construct.apply(this, arguments);
   }
 
+  Controller.on = function(path, event, func) {
+    if (!this.pathhooks[path]) {
+      this.pathhooks[path] = {};
+    }
+
+    if (!this.pathhooks[path][event]) {
+      this.pathhooks[path][event] = [];
+    }
+
+    this.pathhooks[path][event].push(func);
+  };
+
+  Controller.pathHooksFor = function(path, event) {
+    if (!this.pathHooks[path]) {
+      return [];
+    }
+
+    if (!this.pathHooks[path][event]) {
+      return [];
+    }
+
+    return this.pathHooks[path][event];
+  };
+
+  Controller.pathHooks = {};
+  
   var fn = Controller.prototype,
       app = angular.module("cyberhawk/controller", [
         "cyberhawk/notifier", "cyberhawk/requester",
         "cyberhawk/pagination"
       ]);
 
-  fn.construct = function(requesterBuilder, notifier, $location, $timeout, pagination, routeParams) {
+  fn.construct = function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
     this.requester = requesterBuilder.build($location);
     this.notifier = notifier;
     this.pagination = pagination;
     this.location = $location;
     this.$timeout = $timeout;
     this.route = routeParams;
+    this.routeParams = route.current.pathParams;
+    this.route = route.current.$$route.route
 
     _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
     this.requester.bind(this);
@@ -263,7 +291,7 @@
     "$location",
     "$timeout",
     "cyberhawk_pagination",
-    "$routeParams",
+    "$route",
     Controller
   ]);
 
