@@ -195,37 +195,41 @@
     this.construct.apply(this, arguments);
   }
 
-  Controller.on = function(path, event, func) {
-    if (!this.pathHooks[path]) {
-      this.pathHooks[path] = {};
-    }
+  var ClassMethods = {
+    on: function(path, event, func) {
+      if (!this.pathHooks[path]) {
+        this.pathHooks[path] = {};
+      }
 
-    if (!this.pathHooks[path][event]) {
-      this.pathHooks[path][event] = [];
-    }
+      if (!this.pathHooks[path][event]) {
+        this.pathHooks[path][event] = [];
+      }
 
-    this.pathHooks[path][event].push(func);
-  };
+      this.pathHooks[path][event].push(func);
+    },
 
-  Controller.pathHooksFor = function(path, event) {
-    if (!this.pathHooks[path]) {
-      return [];
-    }
+    pathHooksFor: function(path, event) {
+      if (!this.pathHooks[path]) {
+        return [];
+      }
 
-    if (!this.pathHooks[path][event]) {
-      return [];
-    }
+      if (!this.pathHooks[path][event]) {
+        return [];
+      }
 
-    return this.pathHooks[path][event];
-  };
+      return this.pathHooks[path][event];
+    },
 
-  Controller.pathHooks = {};
+    pathHooks: {}
+  }
+
+  _.extend(Controller, ClassMethods);
 
   var fn = Controller.prototype,
-      app = angular.module("cyberhawk/controller", [
-        "cyberhawk/notifier", "cyberhawk/requester",
-        "cyberhawk/pagination"
-      ]);
+    app = angular.module("cyberhawk/controller", [
+      "cyberhawk/notifier", "cyberhawk/requester",
+      "cyberhawk/pagination"
+    ]);
 
   fn.construct = function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
     this.requester = requesterBuilder.build($location);
