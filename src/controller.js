@@ -55,7 +55,13 @@
       },
 
       extend: function(path, controller) {
-        _.extend(controller, this.extensionFor(path));
+        var methods = this.extensionFor(path);
+
+        _.extend(controller, methods);
+
+        for(method in methods) {
+          _.bindAll(controller, method)
+        }
       },
 
       pathExtensions: {}
