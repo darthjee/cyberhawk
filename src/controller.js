@@ -28,7 +28,7 @@
   };
 
   Controller.pathHooks = {};
-  
+
   var fn = Controller.prototype,
       app = angular.module("cyberhawk/controller", [
         "cyberhawk/notifier", "cyberhawk/requester",
@@ -44,14 +44,24 @@
     this.routeParams = route.current.pathParams;
     this.route = route.current.$$route.route
 
-    _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
+    _.bindAll(this, "execute", "_setData", "save", "request", "_goIndex", "_error");
     this.requester.bind(this);
     this.request();
   };
 
+  fn.execute = function(functions) {
+    var that = this;
+
+    _.each(functions, function(func) {
+      func.apply(this);
+    });
+  }
+
   fn.request = function() {
     var promise = this.requester.request();
     promise.then(this._setData);
+
+    this.execute(Controller.pathHooksFor(this.route, 'request'));
   };
 
   fn._setData = function(response) {
