@@ -235,7 +235,7 @@
       },
 
       trigger: function(controller, path, event) {
-        var hooks = this.pathHooksFor(path, 'request');
+        var hooks = this.pathHooksFor(path, event);
 
         _.each(hooks, function(func) {
           if (typeof func == "string") {
