@@ -195,41 +195,44 @@
     this.construct.apply(this, arguments);
   }
 
-  var ClassMethods = {
-    on: function(path, event, func) {
-      if (!this.pathHooks[path]) {
-        this.pathHooks[path] = {};
-      }
-
-      if (!this.pathHooks[path][event]) {
-        this.pathHooks[path][event] = [];
-      }
-
-      this.pathHooks[path][event].push(func);
-    },
-
-    pathHooksFor: function(path, event) {
-      if (!this.pathHooks[path]) {
-        return [];
-      }
-
-      if (!this.pathHooks[path][event]) {
-        return [];
-      }
-
-      return this.pathHooks[path][event];
-    },
-
-    pathHooks: {}
-  }
-
-  _.extend(Controller, ClassMethods);
-
   var fn = Controller.prototype,
     app = angular.module("cyberhawk/controller", [
       "cyberhawk/notifier", "cyberhawk/requester",
       "cyberhawk/pagination"
-    ]);
+    ]),
+
+    HooksMethods = {
+      on: function(path, event, func) {
+        if (!this.pathHooks[path]) {
+          this.pathHooks[path] = {};
+        }
+
+        if (!this.pathHooks[path][event]) {
+          this.pathHooks[path][event] = [];
+        }
+
+        this.pathHooks[path][event].push(func);
+      },
+
+      pathHooksFor: function(path, event) {
+        if (!this.pathHooks[path]) {
+          return [];
+        }
+
+        if (!this.pathHooks[path][event]) {
+          return [];
+        }
+
+        return this.pathHooks[path][event];
+      },
+
+      pathHooks: {}
+    },
+
+    ExtensionMethods = {
+    };
+
+    _.extend(Controller, HooksMethods, ExtensionMethods);
 
   _.extend(fn, {
     construct: function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
