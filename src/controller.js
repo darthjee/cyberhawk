@@ -42,6 +42,18 @@
         return this.pathHooks[path][event];
       },
 
+      trigger: function(controller, path, event) {
+        var hooks = this.pathHooksFor(path, event);
+
+        _.each(hooks, function(func) {
+          if (typeof func == "string") {
+            controller[func]();
+          } else {
+            func.apply(controller);
+          }
+        });
+      },
+
       pathHooks: {}
     },
 
@@ -96,34 +108,23 @@
       this.route = route.current.$$route.route
 
       this.constructor.extend(this.route, this);
-      _.bindAll(this, "execute", "_setData", "save", "request", "_goIndex", "_error");
+      _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
       this.requester.bind(this);
       this.request();
-    },
-
-    execute: function(functions) {
-      var that = this;
-
-      _.each(functions, function(func) {
-        if (typeof func == "string") {
-          that[func]();
-        } else {
-          func.apply(that);
-        }
-      });
     },
 
     request: function() {
       var promise = this.requester.request();
       promise.then(this._setData);
 
-      this.execute(Controller.pathHooksFor(this.route, 'request'));
+      this.constructor.trigger(this, this.route, 'request');
     },
 
     _setData: function(response) {
       this._setPagination(response);
       this.data = response.data;
       this.loaded = true;
+      this.constructor.trigger(this, this.route, 'loaded');
     },
 
     _setPagination: function(response) {
