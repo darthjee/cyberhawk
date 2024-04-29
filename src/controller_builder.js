@@ -19,12 +19,13 @@
     }
 
     build(controller) {
+      _.extend(controller.constructor.prototype, Controller.prototype);
+
       _.extend(controller, this.attributes);
       Controller.extend(controller.route, controller);
       _.bindAll(controller, "_setData", "save", "request", "_goIndex", "_error");
       controller.requester.bind(controller);
 
-      _.extend(controller.constructor.prototype, Controller.prototype);
 
       controller.request();
     }
