@@ -703,7 +703,10 @@
 
 // controller_builder.js
 (function(_, angular, Cyberhawk) {
-  var module = angular.module("cyberhawk/builder", []),
+  var module = angular.module("cyberhawk/builder", [
+    "cyberhawk/notifier", "cyberhawk/requester",
+    "cyberhawk/pagination"
+  ]),
     Controller = Cyberhawk.Controller;
 
   class ControllerBuilderService {
@@ -731,8 +734,8 @@
     }
   }
 
-  function ControllerBuilderServiceFactory($http) {
-    return new ControllerBuilderService($http);
+  function ControllerBuilderServiceFactory(requesterBuilder, notifier, $location, $timeout, pagination, route) {
+    return new ControllerBuilderService(requesterBuilder, notifier, $location, $timeout, pagination, route);
   }
 
   module.service("cyberhawk_builder", [
