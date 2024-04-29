@@ -354,13 +354,7 @@
   });
 
   app.controller("Cyberhawk.Controller", [
-    "cyberhawk_requester",
-    "cyberhawk_notifier",
-    "$location",
-    "$timeout",
-    "cyberhawk_pagination",
-    "$route",
-    Controller
+    'cyberhawk_builder', function(builder) { builder.build(this); }
   ]);
 
   Cyberhawk.Controller = Controller;
