@@ -662,13 +662,13 @@
     buildController(app, name) {
       var config = this;
 
-      function NewController(builder, notifier, $location, $timeout, pagination, route) {
+      var NewController = function(builder, notifier, $location, $timeout, pagination, route) {
         config.construct(builder, notifier, $location, $timeout, pagination, route);
       };
 
       var fn = NewController.prototype;
 
-      _.extend(fn, this.prototype);
+      _.extend(fn, this.controller.prototype);
 
       app.controller(name, [
         "cyberhawk_requester", "cyberhawk_notifier", "$location",
