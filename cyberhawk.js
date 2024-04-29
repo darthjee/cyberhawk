@@ -658,6 +658,28 @@
     constructor() {
       this.controller = Cyberhawk.Controller;
     }
+
+    buildController(app, name) {
+      var config = this;
+
+      function NewController(builder, notifier, $location, $timeout, pagination, route) {
+        config.construct(builder, notifier, $location, $timeout, pagination, route);
+      };
+
+      var fn = NewController.prototype;
+
+      _.extend(fn, this.prototype);
+
+      app.controller(name, [
+        "cyberhawk_requester", "cyberhawk_notifier", "$location",
+        "$timeout",
+        "cyberhawk_pagination",
+        "$route",
+        NewController
+      ]);
+
+      return NewController;
+    }
   }
 
   // Old prototype style, can't get rid of it :(
