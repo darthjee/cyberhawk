@@ -36,7 +36,7 @@
         $timeout: this.$timeout,
         routeParams: this.route.current.pathParams,
         route: this.route.current.$$route.route
-      }
+      };
     }
   }
 
