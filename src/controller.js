@@ -107,7 +107,7 @@
       this.routeParams = route.current.pathParams;
       this.route = route.current.$$route.route
 
-      this.constructor.extend(this.route, this);
+      Controller.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
       this.requester.bind(this);
       this.request();
@@ -117,14 +117,14 @@
       var promise = this.requester.request();
       promise.then(this._setData);
 
-      this.constructor.trigger(this, this.route, 'request');
+      Controller.trigger(this, this.route, 'request');
     },
 
     _setData: function(response) {
       this._setPagination(response);
       this.data = response.data;
       this.loaded = true;
-      this.constructor.trigger(this, this.route, 'loaded');
+      Controller.trigger(this, this.route, 'loaded');
     },
 
     _setPagination: function(response) {
@@ -162,13 +162,7 @@
   });
 
   app.controller("Cyberhawk.Controller", [
-    "cyberhawk_requester",
-    "cyberhawk_notifier",
-    "$location",
-    "$timeout",
-    "cyberhawk_pagination",
-    "$route",
-    Controller
+    "cyberhawk_builder", function(builder) { builder.build(this); }
   ]);
 
   Cyberhawk.Controller = Controller;

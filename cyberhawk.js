@@ -83,7 +83,7 @@
 
   angular.module("cyberhawk", [
     "cyberhawk/requester", "cyberhawk/controller",
-    "cyberhawk/config"
+    "cyberhawk/config", "cyberhawk/builder"
   ]);
 }(window.angular, window));
 
@@ -299,7 +299,7 @@
       this.routeParams = route.current.pathParams;
       this.route = route.current.$$route.route
 
-      this.constructor.extend(this.route, this);
+      Controller.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
       this.requester.bind(this);
       this.request();
@@ -309,14 +309,14 @@
       var promise = this.requester.request();
       promise.then(this._setData);
 
-      this.constructor.trigger(this, this.route, 'request');
+      Controller.trigger(this, this.route, 'request');
     },
 
     _setData: function(response) {
       this._setPagination(response);
       this.data = response.data;
       this.loaded = true;
-      this.constructor.trigger(this, this.route, 'loaded');
+      Controller.trigger(this, this.route, 'loaded');
     },
 
     _setPagination: function(response) {
@@ -354,13 +354,7 @@
   });
 
   app.controller("Cyberhawk.Controller", [
-    "cyberhawk_requester",
-    "cyberhawk_notifier",
-    "$location",
-    "$timeout",
-    "cyberhawk_pagination",
-    "$route",
-    Controller
+    'cyberhawk_builder', function(builder) { builder.build(this); }
   ]);
 
   Cyberhawk.Controller = Controller;
@@ -658,6 +652,28 @@
     constructor() {
       this.controller = Cyberhawk.Controller;
     }
+
+    buildController(app, name) {
+      var config = this;
+
+      var NewController = function(builder, notifier, $location, $timeout, pagination, route) {
+        config.construct(builder, notifier, $location, $timeout, pagination, route);
+      };
+
+      var fn = NewController.prototype;
+
+      _.extend(fn, this.controller.prototype);
+
+      app.controller(name, [
+        "cyberhawk_requester", "cyberhawk_notifier", "$location",
+        "$timeout",
+        "cyberhawk_pagination",
+        "$route",
+        NewController
+      ]);
+
+      return NewController;
+    }
   }
 
   // Old prototype style, can't get rid of it :(
@@ -677,5 +693,63 @@
   };
 
   module.provider('cyberhawk', CyberhawkProvider);
+}(window._, window.angular, window.Cyberhawk));
+
+// controller_builder.js
+(function(_, angular, Cyberhawk) {
+  var module = angular.module("cyberhawk/builder", [
+    "cyberhawk/notifier", "cyberhawk/requester",
+    "cyberhawk/pagination"
+  ]),
+    Controller = Cyberhawk.Controller;
+
+  class ControllerBuilderService {
+    constructor(requesterBuilder, notifier, $location, $timeout, pagination, route) {
+      this.requesterBuilder = requesterBuilder;
+      this.notifier = notifier;
+      this.pagination = pagination;
+      this.$location = $location;
+      this.$timeout = $timeout;
+      this.route = route;
+    }
+
+    build(controller) {
+      _.extend(controller.constructor.prototype, Controller.prototype);
+
+      _.extend(controller, this.attributes());
+      Controller.extend(controller.route, controller);
+      _.bindAll(controller, "_setData", "save", "request", "_goIndex", "_error");
+      controller.requester.bind(controller);
+
+
+      controller.request();
+    }
+
+    attributes() {
+      return {
+        requester: this.requesterBuilder.build(this.$location),
+        notifier: this.notifier,
+        pagination: this.pagination,
+        location: this.$location,
+        $timeout: this.$timeout,
+        routeParams: this.route.current.pathParams,
+        route: this.route.current.$$route.route
+      }
+    }
+  }
+
+  function ControllerBuilderServiceFactory(requesterBuilder, notifier, $location, $timeout, pagination, route) {
+    return new ControllerBuilderService(requesterBuilder, notifier, $location, $timeout, pagination, route);
+  }
+
+  module.service("cyberhawk_builder", [
+    "cyberhawk_requester",
+    "cyberhawk_notifier",
+    "$location",
+    "$timeout",
+    "cyberhawk_pagination",
+    "$route",
+    ControllerBuilderServiceFactory
+  ]);
 }(window._, window.angular, window.Cyberhawk));
 
