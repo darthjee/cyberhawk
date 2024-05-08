@@ -354,7 +354,7 @@
   });
 
   app.controller("Cyberhawk.Controller", [
-    'cyberhawk_builder', function(builder) { builder.build(this); }
+    "cyberhawk_builder", function(builder) { builder.build(this); }
   ]);
 
   Cyberhawk.Controller = Controller;
@@ -734,7 +734,7 @@
         $timeout: this.$timeout,
         routeParams: this.route.current.pathParams,
         route: this.route.current.$$route.route
-      }
+      };
     }
   }
 
