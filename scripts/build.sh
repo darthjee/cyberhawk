@@ -8,10 +8,12 @@ FILES=$FILES" filters/string.js filters/number.js"
 FILES=$FILES" config.js"
 FILES=$FILES" controller_builder.js"
 
-echo "" > cyberhawk.js
+cp template/header.js cyberhawk.js
 
 for FILE in $FILES; do
   echo "// $FILE" >> cyberhawk.js
   cat "src/$FILE" >> cyberhawk.js
   echo "" >> cyberhawk.js
 done
+
+cat template/footer.js >> cyberhawk.js

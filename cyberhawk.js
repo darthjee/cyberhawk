@@ -1,4 +1,4 @@
-
+(function(_, angular, window) {
 // delegator.js
 (function(_) {
   class Delegator {
@@ -753,3 +753,4 @@
   ]);
 }(window._, window.angular, window.Cyberhawk));
 
+}(window._, window.angular, window));
