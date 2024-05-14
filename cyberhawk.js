@@ -283,7 +283,7 @@
 }(_, local));
 
 // controller.js
-(function(_, angular, Cyberhawk, HooksMethods) {
+(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods) {
   function Controller() {
     this.construct.apply(this, arguments);
   }
@@ -718,7 +718,7 @@
 }(_, angular, local.Cyberhawk));
 
 // controller_builder.js
-(function(_, angular, Cyberhawk) {
+(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods) {
   var module = angular.module("cyberhawk/builder", [
     "cyberhawk/notifier", "cyberhawk/requester",
     "cyberhawk/pagination"
@@ -737,6 +737,7 @@
 
     build(controller) {
       _.extend(controller.constructor.prototype, Controller.prototype);
+      _.extend(controller.constructor, HooksMethods, ExtensionMethods);
 
       _.extend(controller, this.attributes());
       Controller.extend(controller.route, controller);
@@ -773,6 +774,6 @@
     "$route",
     ControllerBuilderServiceFactory
   ]);
-}(_, angular, local.Cyberhawk));
+}(_, angular, local.Cyberhawk, local.HooksMethods, local.ExtensionMethods));
 
 }(window._, window.angular, window.querystring, window));

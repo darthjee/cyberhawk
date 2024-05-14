@@ -1,4 +1,4 @@
-(function(_, angular, Cyberhawk, HooksMethods) {
+(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods) {
   function Controller() {
     this.construct.apply(this, arguments);
   }
