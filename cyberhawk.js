@@ -1,4 +1,5 @@
 (function(_, angular, window) {
+  var local = {};
 // delegator.js
 (function(_) {
   class Delegator {
@@ -78,14 +79,14 @@
 }(_));
 
 // cyberhawk.js
-(function(angular, global) {
-  global.Cyberhawk = {};
+(function(angular, global, local) {
+  local.Cyberhawk = global.Cyberhawk = {};
 
   angular.module("cyberhawk", [
     "cyberhawk/requester", "cyberhawk/controller",
     "cyberhawk/config", "cyberhawk/builder"
   ]);
-}(angular, window));
+}(angular, window, local));
 
 // underscore_ext.js
 (function(_) {
