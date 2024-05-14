@@ -1,6 +1,6 @@
 (function(_, local) {
   local.ControllerMethods = {
-    construct: function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
+    construct(requesterBuilder, notifier, $location, $timeout, pagination, route) {
       this.requester = requesterBuilder.build($location);
       this.notifier = notifier;
       this.pagination = pagination;
@@ -15,27 +15,27 @@
       this.request();
     },
 
-    request: function() {
+    request() {
       var promise = this.requester.request();
       promise.then(this._setData);
 
       this.constructor.trigger(this, this.route, 'request');
     },
 
-    _setData: function(response) {
+    _setData(response) {
       this._setPagination(response);
       this.data = response.data;
       this.loaded = true;
       this.constructor.trigger(this, this.route, 'loaded');
     },
 
-    _setPagination: function(response) {
+    _setPagination(response) {
       if (this.pagination) {
         this.pagination.parse(response);
       }
     },
 
-    save: function() {
+    save() {
       var promise = this.requester.saveRequest(this.payload());
 
       promise.then(this._setData);
@@ -43,21 +43,21 @@
       promise.error(this._error);
     },
 
-    payload: function() {
+    payload() {
       return this.data;
     },
 
-    _error: function(data, responseStatus) {
+    _error(data, responseStatus) {
       if(responseStatus === 422) {
         this.data = data;
       }
     },
 
-    _goIndex: function() {
+    _goIndex() {
       this.location.path(this.location.$$path.replace(/\/(edit|new)$/, ""));
     },
 
-    delete: function(id) {
+    delete(id) {
       var promise = this.requester.deleteRequest(id);
       promise.then(this.request);
     }
