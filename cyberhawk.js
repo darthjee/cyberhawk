@@ -75,7 +75,7 @@
       }
     }
   };
-}(window._));
+}(_));
 
 // cyberhawk.js
 (function(angular, global) {
@@ -85,7 +85,7 @@
     "cyberhawk/requester", "cyberhawk/controller",
     "cyberhawk/config", "cyberhawk/builder"
   ]);
-}(window.angular, window));
+}(angular, window));
 
 // underscore_ext.js
 (function(_) {
@@ -94,7 +94,7 @@
       return i === 0 || e !== array[i-1];
     });
   };
-}(window._));
+}(_));
 
 // paginator.js
 //PAGINATOR
