@@ -23,4 +23,4 @@
 
     _.each(methods, delegator.delegate);
   };
-}(window._));
+}(_));

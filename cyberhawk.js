@@ -25,7 +25,7 @@
 
     _.each(methods, delegator.delegate);
   };
-}(window._));
+}(_));
 
 // function_wrapper.js
 (function(_) {
