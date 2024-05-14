@@ -29,4 +29,4 @@
   };
 
   module.service("cyberhawk_notifier", [Cyberhawk.NotifierServiceFactory]);
-}(_, angular, local.Cyberhawk));
+}(window._, window.angular, local.Cyberhawk));

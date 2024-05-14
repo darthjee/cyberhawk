@@ -1,4 +1,3 @@
-//REQUESTER
 (function(_, angular, Cyberhawk, querystring) {
   var module = angular.module("cyberhawk/requester", ["binded_http"]);
 
@@ -54,4 +53,4 @@
     "binded_http",
     RequesterServiceFactory
   ]);
-}(_, angular, local.Cyberhawk, querystring));
+}(window._, window.angular, local.Cyberhawk, window.querystring));

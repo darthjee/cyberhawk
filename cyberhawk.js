@@ -1,4 +1,4 @@
-(function(_, angular, querystring, window) {
+(function() {
   var local = {};
 // delegator.js
 (function(_) {
@@ -26,7 +26,7 @@
 
     _.each(methods, delegator.delegate);
   };
-}(_));
+}(window._));
 
 // function_wrapper.js
 (function(_) {
@@ -76,7 +76,7 @@
       }
     }
   };
-}(_));
+}(window._));
 
 // cyberhawk.js
 (function(angular, global, local) {
@@ -86,7 +86,7 @@
     "cyberhawk/requester", "cyberhawk/controller",
     "cyberhawk/config", "cyberhawk/builder"
   ]);
-}(angular, window, local));
+}(window.angular, window, local));
 
 // underscore_ext.js
 (function(_) {
@@ -95,10 +95,9 @@
       return i === 0 || e !== array[i-1];
     });
   };
-}(_));
+}(window._));
 
 // paginator.js
-//PAGINATOR
 (function(_, angular, Cyberhawk) {
   var module = angular.module("cyberhawk/paginator", []);
 
@@ -147,8 +146,7 @@
 
   Cyberhawk.Paginator = Paginator;
   module.factory("cyberhawk_paginator", [PaginatorFactory]);
-}(_, angular, local.Cyberhawk));
-
+}(window._, window.angular, local.Cyberhawk));
 
 // pagination.js
 //PAGINATION
@@ -187,7 +185,7 @@
   ]);
 
   Cyberhawk.PaginationService = PaginationService;
-}(_, angular, local.Cyberhawk));
+}(window._, window.angular, local.Cyberhawk));
 
 
 // hooks_methods.js
@@ -239,7 +237,7 @@
 
     pathHooks: {}
   }
-}(_, local));
+}(window._, local));
 
 // extension_methods.js
 (function(_, local) {
@@ -280,7 +278,7 @@
 
     pathExtensions: {}
   };
-}(_, local));
+}(window._, local));
 
 // controller_methods.js
 (function(_, local) {
@@ -347,7 +345,7 @@
       promise.then(this.request);
     }
   };
-}(_, local));
+}(window._, local));
 
 // controller.js
 (function(_, angular, local) {
@@ -375,7 +373,7 @@
   ]);
 
   Cyberhawk.Controller = Controller;
-}(_, angular, local));
+}(window._, window.angular, local));
 
 // notifier.js
 (function(_, angular, Cyberhawk) {
@@ -409,7 +407,7 @@
   };
 
   module.service("cyberhawk_notifier", [Cyberhawk.NotifierServiceFactory]);
-}(_, angular, local.Cyberhawk));
+}(window._, window.angular, local.Cyberhawk));
 
 // binded_http.js
 (function(_, angular) {
@@ -488,10 +486,9 @@
     "$http",
     BindedHttpServiceFactory
   ]);
-}(_, angular));
+}(window._, window.angular));
 
 // requester.js
-//REQUESTER
 (function(_, angular, Cyberhawk, querystring) {
   var module = angular.module("cyberhawk/requester", ["binded_http"]);
 
@@ -547,7 +544,7 @@
     "binded_http",
     RequesterServiceFactory
   ]);
-}(_, angular, local.Cyberhawk, querystring));
+}(window._, window.angular, local.Cyberhawk, window.querystring));
 
 // filters/dig.js
 (function(angular, _) {
@@ -687,7 +684,7 @@
   };
 
   module.provider('cyberhawk', CyberhawkProvider);
-}(_, angular, local.Cyberhawk));
+}(window._, window.angular, local.Cyberhawk));
 
 // controller_builder.js
 (function(_, angular, local) {
@@ -750,6 +747,6 @@
     "$route",
     ControllerBuilderServiceFactory
   ]);
-}(_, angular, local));
+}(window._, window.angular, local));
 
-}(window._, window.angular, window.querystring, window));
+}());

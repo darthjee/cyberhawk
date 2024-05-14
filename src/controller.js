@@ -23,4 +23,4 @@
   ]);
 
   Cyberhawk.Controller = Controller;
-}(_, angular, local));
+}(window._, window.angular, local));

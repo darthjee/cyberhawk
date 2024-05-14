@@ -62,4 +62,4 @@
       promise.then(this.request);
     }
   };
-}(_, local));
+}(window._, local));

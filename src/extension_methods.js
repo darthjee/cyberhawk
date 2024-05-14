@@ -36,4 +36,4 @@
 
     pathExtensions: {}
   };
-}(_, local));
+}(window._, local));

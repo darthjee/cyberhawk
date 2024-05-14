@@ -46,4 +46,4 @@
 
     pathHooks: {}
   }
-}(_, local));
+}(window._, local));

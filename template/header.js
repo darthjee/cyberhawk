@@ -1,2 +1,2 @@
-(function(_, angular, querystring, window) {
+(function() {
   var local = {};

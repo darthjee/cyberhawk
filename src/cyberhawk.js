@@ -5,4 +5,4 @@
     "cyberhawk/requester", "cyberhawk/controller",
     "cyberhawk/config", "cyberhawk/builder"
   ]);
-}(angular, window, local));
+}(window.angular, window, local));

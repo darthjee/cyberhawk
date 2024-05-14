@@ -1,4 +1,3 @@
-//PAGINATOR
 (function(_, angular, Cyberhawk) {
   var module = angular.module("cyberhawk/paginator", []);
 
@@ -47,5 +46,4 @@
 
   Cyberhawk.Paginator = Paginator;
   module.factory("cyberhawk_paginator", [PaginatorFactory]);
-}(_, angular, local.Cyberhawk));
-
+}(window._, window.angular, local.Cyberhawk));

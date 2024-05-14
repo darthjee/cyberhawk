@@ -58,4 +58,4 @@
     "$route",
     ControllerBuilderServiceFactory
   ]);
-}(_, angular, local));
+}(window._, window.angular, local));
