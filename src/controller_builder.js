@@ -1,4 +1,4 @@
-(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods) {
+(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods, ControllerMethods) {
   var module = angular.module("cyberhawk/builder", [
     "cyberhawk/notifier", "cyberhawk/requester",
     "cyberhawk/pagination"
@@ -54,4 +54,4 @@
     "$route",
     ControllerBuilderServiceFactory
   ]);
-}(_, angular, local.Cyberhawk, local.HooksMethods, local.ExtensionMethods));
+}(_, angular, local.Cyberhawk, local.HooksMethods, local.ExtensionMethods, local.ControllerMethods));
