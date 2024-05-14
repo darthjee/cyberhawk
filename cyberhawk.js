@@ -350,7 +350,12 @@
 }(_, local));
 
 // controller.js
-(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods, ControllerMethods) {
+(function(_, angular, local) {
+  var Cyberhawk = local.Cyberhawk,
+    HooksMethods = local.HooksMethods,
+    ExtensionMethods = local.ExtensionMethods,
+    ControllerMethods = local.ControllerMethods;
+
   function Controller() {
     this.construct.apply(this, arguments);
   }
@@ -370,7 +375,7 @@
   ]);
 
   Cyberhawk.Controller = Controller;
-}(_, angular, local.Cyberhawk, local.HooksMethods, local.ExtensionMethods, local.ControllerMethods));
+}(_, angular, local));
 
 // notifier.js
 (function(_, angular, Cyberhawk) {
