@@ -290,7 +290,7 @@
       this.location = $location;
       this.$timeout = $timeout;
       this.routeParams = route.current.pathParams;
-      this.route = route.current.$$route.route
+      this.route = route.current.$$route.route;
 
       this.constructor.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
@@ -302,7 +302,7 @@
       var promise = this.requester.request();
       promise.then(this._setData);
 
-      this.constructor.trigger(this, this.route, 'request');
+      this.constructor.trigger(this, this.route, "request");
     },
 
     _setData(response) {
