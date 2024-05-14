@@ -14,7 +14,7 @@
       }
 
       if (typeof name == "string") {
-        this.pathExtensions[path][name] = func
+        this.pathExtensions[path][name] = func;
       } else {
         _.extend(this.pathExtensions[path], name);
       }
@@ -29,7 +29,7 @@
 
       _.extend(controller, methods);
 
-      for(method in methods) {
+      for(var method in methods) {
         _.bindAll(controller, method)
       }
     },
