@@ -1,6 +1,6 @@
 (function(_, local) {
   local.HooksMethods = {
-    on: function(path, event, func) {
+    on(path, event, func) {
       if (path.constructor == Array) {
         let klass = this;
 
@@ -20,7 +20,7 @@
       this.pathHooks[path][event].push(func);
     },
 
-    pathHooksFor: function(path, event) {
+    pathHooksFor(path, event) {
       if (!this.pathHooks[path]) {
         return [];
       }
@@ -32,7 +32,7 @@
       return this.pathHooks[path][event];
     },
 
-    trigger: function(controller, path, event) {
+    trigger(controller, path, event) {
       var hooks = this.pathHooksFor(path, event);
 
       _.each(hooks, function(func) {
