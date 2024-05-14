@@ -118,4 +118,4 @@
   ]);
 
   Cyberhawk.Controller = Controller;
-}(_, angular, local.Cyberhawk, local.HooksMethods));
+}(_, angular, local.Cyberhawk, local.HooksMethods, local.ExtensionMethods));
