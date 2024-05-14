@@ -282,21 +282,9 @@
   };
 }(_, local));
 
-// controller.js
-(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods) {
-  function Controller() {
-    this.construct.apply(this, arguments);
-  }
-
-  var fn = Controller.prototype,
-    app = angular.module("cyberhawk/controller", [
-      "cyberhawk/notifier", "cyberhawk/requester",
-      "cyberhawk/pagination"
-    ]);
-
-  _.extend(Controller, HooksMethods, ExtensionMethods);
-
-  _.extend(fn, {
+// controller_methods.js
+(function(_, Controller, local) {
+  local.ControllerMethods = {
     construct: function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
       this.requester = requesterBuilder.build($location);
       this.notifier = notifier;
@@ -358,14 +346,31 @@
       var promise = this.requester.deleteRequest(id);
       promise.then(this.request);
     }
-  });
+  };
+}(_, local.Controller, local));
+
+// controller.js
+(function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods, ControllerMethods) {
+  function Controller() {
+    this.construct.apply(this, arguments);
+  }
+
+  var fn = Controller.prototype,
+    app = angular.module("cyberhawk/controller", [
+      "cyberhawk/notifier", "cyberhawk/requester",
+      "cyberhawk/pagination"
+    ]);
+
+  _.extend(Controller, HooksMethods, ExtensionMethods);
+
+  _.extend(fn, ControllerMethods);
 
   app.controller("Cyberhawk.Controller", [
     "cyberhawk_builder", function(builder) { builder.build(this); }
   ]);
 
   Cyberhawk.Controller = Controller;
-}(_, angular, local.Cyberhawk, local.HooksMethods, local.ExtensionMethods));
+}(_, angular, local.Cyberhawk, local.HooksMethods, local.ExtensionMethods, local.ControllerMethods));
 
 // notifier.js
 (function(_, angular, Cyberhawk) {
@@ -698,7 +703,7 @@
     }
 
     build(controller) {
-      _.extend(controller.constructor.prototype, Controller.prototype);
+      _.extend(controller.constructor.prototype, ControllerMethods);
       _.extend(controller.constructor, HooksMethods, ExtensionMethods);
 
       _.extend(controller, this.attributes());

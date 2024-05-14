@@ -16,7 +16,7 @@
     }
 
     build(controller) {
-      _.extend(controller.constructor.prototype, Controller.prototype);
+      _.extend(controller.constructor.prototype, ControllerMethods);
       _.extend(controller.constructor, HooksMethods, ExtensionMethods);
 
       _.extend(controller, this.attributes());
