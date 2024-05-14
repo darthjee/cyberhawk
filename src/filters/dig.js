@@ -21,4 +21,4 @@
   angular
     .module("cyberhawk")
     .filter("dig", function() { return Digger.dig; });
-}(window.angular, window._));
+}(angular, _));

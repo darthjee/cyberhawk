@@ -53,4 +53,4 @@
     "$route",
     ControllerBuilderServiceFactory
   ]);
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));

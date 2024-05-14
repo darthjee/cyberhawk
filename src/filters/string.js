@@ -6,4 +6,4 @@
         return input.toString();
       };
     });
-})(window.angular);
+})(angular);

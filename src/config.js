@@ -22,4 +22,4 @@
   };
 
   module.provider('cyberhawk', CyberhawkProvider);
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));

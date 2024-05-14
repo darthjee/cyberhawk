@@ -1,1 +1,1 @@
-}(window._, window.angular, window));
+}(window._, window.angular, window.querystring, window));

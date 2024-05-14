@@ -10,4 +10,4 @@
         return parseInt(input);
       };
     });
-})(window.angular);
+})(angular);

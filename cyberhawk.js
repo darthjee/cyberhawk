@@ -1,4 +1,4 @@
-(function(_, angular, window) {
+(function(_, angular, querystring, window) {
   var local = {};
 // delegator.js
 (function(_) {
@@ -531,7 +531,7 @@
     "binded_http",
     RequesterServiceFactory
   ]);
-}(window._, window.angular, window.Cyberhawk, window.querystring));
+}(_, angular, local.Cyberhawk, querystring));
 
 // filters/dig.js
 (function(angular, _) {
@@ -557,7 +557,7 @@
   angular
     .module("cyberhawk")
     .filter("dig", function() { return Digger.dig; });
-}(window.angular, window._));
+}(angular, _));
 
 // filters/percentage.js
 (function(angular, _) {
@@ -584,8 +584,7 @@
     .filter("percentage", function() {
       return Percentage.parse;
     });
-}(window.angular, window._));
-
+}(angular, _));
 
 // filters/select_options.js
 (function(angular, _) {
@@ -619,7 +618,7 @@
     .filter("select_transformer", function() {
       return Finder.find;
     });
-}(window.angular, window._));
+}(angular, _));
 
 // filters/string.js
 (function(angular) {
@@ -630,7 +629,7 @@
         return input.toString();
       };
     });
-})(window.angular);
+})(angular);
 
 // filters/number.js
 (function(angular) {
@@ -645,7 +644,7 @@
         return parseInt(input);
       };
     });
-})(window.angular);
+})(angular);
 
 // config.js
 (function(_, angular, Cyberhawk) {
@@ -672,7 +671,7 @@
   };
 
   module.provider('cyberhawk', CyberhawkProvider);
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));
 
 // controller_builder.js
 (function(_, angular, Cyberhawk) {
@@ -730,6 +729,6 @@
     "$route",
     ControllerBuilderServiceFactory
   ]);
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));
 
-}(window._, window.angular, window));
+}(window._, window.angular, window.querystring, window));

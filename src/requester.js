@@ -54,4 +54,4 @@
     "binded_http",
     RequesterServiceFactory
   ]);
-}(window._, window.angular, window.Cyberhawk, window.querystring));
+}(_, angular, local.Cyberhawk, querystring));
