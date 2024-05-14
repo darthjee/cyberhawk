@@ -1,7 +1,7 @@
 (function(_, local) {
   local.ExtensionMethods = {
     withPath(path, name, func) {
-      if (path.constructor == Array) {
+      if (path.constructor === Array) {
         let klass = this;
 
         return _.each(path, function(route) {
@@ -30,7 +30,7 @@
       _.extend(controller, methods);
 
       for(var method in methods) {
-        _.bindAll(controller, method)
+        _.bindAll(controller, method);
       }
     },
 

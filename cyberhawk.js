@@ -236,14 +236,14 @@
     },
 
     pathHooks: {}
-  }
+  };
 }(window._, local));
 
 // extension_methods.js
 (function(_, local) {
   local.ExtensionMethods = {
     withPath(path, name, func) {
-      if (path.constructor == Array) {
+      if (path.constructor === Array) {
         let klass = this;
 
         return _.each(path, function(route) {
@@ -272,7 +272,7 @@
       _.extend(controller, methods);
 
       for(var method in methods) {
-        _.bindAll(controller, method)
+        _.bindAll(controller, method);
       }
     },
 
@@ -309,7 +309,7 @@
       this._setPagination(response);
       this.data = response.data;
       this.loaded = true;
-      this.constructor.trigger(this, this.route, 'loaded');
+      this.constructor.trigger(this, this.route, "loaded");
     },
 
     _setPagination(response) {

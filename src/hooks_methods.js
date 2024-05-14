@@ -45,5 +45,5 @@
     },
 
     pathHooks: {}
-  }
+  };
 }(window._, local));
