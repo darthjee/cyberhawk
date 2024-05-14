@@ -3,28 +3,6 @@
     constructor() {
       this.controller = Cyberhawk.Controller;
     }
-
-    buildController(app, name) {
-      var config = this;
-
-      var NewController = function(builder, notifier, $location, $timeout, pagination, route) {
-        config.construct(builder, notifier, $location, $timeout, pagination, route);
-      };
-
-      var fn = NewController.prototype;
-
-      _.extend(fn, this.controller.prototype);
-
-      app.controller(name, [
-        "cyberhawk_requester", "cyberhawk_notifier", "$location",
-        "$timeout",
-        "cyberhawk_pagination",
-        "$route",
-        NewController
-      ]);
-
-      return NewController;
-    }
   }
 
   // Old prototype style, can't get rid of it :(
@@ -44,4 +22,4 @@
   };
 
   module.provider('cyberhawk', CyberhawkProvider);
-}(window._, window.angular, window.Cyberhawk));
+}(window._, window.angular, local.Cyberhawk));

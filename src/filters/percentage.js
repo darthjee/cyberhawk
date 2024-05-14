@@ -23,4 +23,3 @@
       return Percentage.parse;
     });
 }(window.angular, window._));
-

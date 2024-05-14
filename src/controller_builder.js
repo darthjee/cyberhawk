@@ -1,9 +1,13 @@
-(function(_, angular, Cyberhawk) {
-  var module = angular.module("cyberhawk/builder", [
-    "cyberhawk/notifier", "cyberhawk/requester",
-    "cyberhawk/pagination"
-  ]),
-    Controller = Cyberhawk.Controller;
+(function(_, angular, local) {
+  var Controller = local.Cyberhawk.Controller,
+    HooksMethods = local.HooksMethods,
+    ExtensionMethods = local.ExtensionMethods,
+    ControllerMethods = local.ControllerMethods,
+
+    module = angular.module("cyberhawk/builder", [
+      "cyberhawk/notifier", "cyberhawk/requester",
+      "cyberhawk/pagination"
+    ]);
 
   class ControllerBuilderService {
     constructor(requesterBuilder, notifier, $location, $timeout, pagination, route) {
@@ -16,7 +20,8 @@
     }
 
     build(controller) {
-      _.extend(controller.constructor.prototype, Controller.prototype);
+      _.extend(controller.constructor.prototype, ControllerMethods);
+      _.extend(controller.constructor, HooksMethods, ExtensionMethods);
 
       _.extend(controller, this.attributes());
       Controller.extend(controller.route, controller);
@@ -53,4 +58,4 @@
     "$route",
     ControllerBuilderServiceFactory
   ]);
-}(window._, window.angular, window.Cyberhawk));
+}(window._, window.angular, local));
