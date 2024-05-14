@@ -147,7 +147,7 @@
 
   Cyberhawk.Paginator = Paginator;
   module.factory("cyberhawk_paginator", [PaginatorFactory]);
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));
 
 
 // pagination.js
@@ -187,7 +187,7 @@
   ]);
 
   Cyberhawk.PaginationService = PaginationService;
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));
 
 
 // controller.js
@@ -359,7 +359,7 @@
   ]);
 
   Cyberhawk.Controller = Controller;
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));
 
 // notifier.js
 (function(_, angular, Cyberhawk) {
@@ -393,7 +393,7 @@
   };
 
   module.service("cyberhawk_notifier", [Cyberhawk.NotifierServiceFactory]);
-}(window._, window.angular, window.Cyberhawk));
+}(_, angular, local.Cyberhawk));
 
 // binded_http.js
 (function(_, angular) {
@@ -472,7 +472,7 @@
     "$http",
     BindedHttpServiceFactory
   ]);
-}(window._, window.angular));
+}(_, angular));
 
 // requester.js
 //REQUESTER

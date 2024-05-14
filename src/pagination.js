@@ -34,5 +34,5 @@
   ]);
 
   Cyberhawk.PaginationService = PaginationService;
-}(_, angular, Cyberhawk));
+}(_, angular, local.Cyberhawk));
 

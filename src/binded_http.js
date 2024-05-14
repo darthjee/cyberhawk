@@ -74,4 +74,4 @@
     "$http",
     BindedHttpServiceFactory
   ]);
-}(window._, window.angular));
+}(_, angular));
