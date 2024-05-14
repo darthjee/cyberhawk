@@ -29,4 +29,4 @@
     .filter("select_transformer", function() {
       return Finder.find;
     });
-}(angular, _));
+}(window.angular, window._));

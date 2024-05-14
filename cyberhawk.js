@@ -570,7 +570,7 @@
   angular
     .module("cyberhawk")
     .filter("dig", function() { return Digger.dig; });
-}(angular, _));
+}(window.angular, window._));
 
 // filters/percentage.js
 (function(angular, _) {
@@ -597,7 +597,7 @@
     .filter("percentage", function() {
       return Percentage.parse;
     });
-}(angular, _));
+}(window.angular, window._));
 
 // filters/select_options.js
 (function(angular, _) {
@@ -631,7 +631,7 @@
     .filter("select_transformer", function() {
       return Finder.find;
     });
-}(angular, _));
+}(window.angular, window._));
 
 // filters/string.js
 (function(angular) {
@@ -642,7 +642,7 @@
         return input.toString();
       };
     });
-})(angular);
+})(window.angular);
 
 // filters/number.js
 (function(angular) {
@@ -657,7 +657,7 @@
         return parseInt(input);
       };
     });
-})(angular);
+})(window.angular);
 
 // config.js
 (function(_, angular, Cyberhawk) {

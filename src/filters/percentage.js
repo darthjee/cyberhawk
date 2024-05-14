@@ -22,4 +22,4 @@
     .filter("percentage", function() {
       return Percentage.parse;
     });
-}(angular, _));
+}(window.angular, window._));
