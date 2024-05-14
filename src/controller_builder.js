@@ -1,4 +1,4 @@
-(function(_, angular, local, HooksMethods, ExtensionMethods, ControllerMethods) {
+(function(_, angular, local) {
   var Controller = local.Cyberhawk.Controller,
     HooksMethods = local.HooksMethods,
     ExtensionMethods = local.ExtensionMethods,
