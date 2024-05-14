@@ -283,7 +283,7 @@
 }(_, local));
 
 // controller_methods.js
-(function(_, Controller, local) {
+(function(_, local) {
   local.ControllerMethods = {
     construct: function(requesterBuilder, notifier, $location, $timeout, pagination, route) {
       this.requester = requesterBuilder.build($location);
@@ -294,7 +294,7 @@
       this.routeParams = route.current.pathParams;
       this.route = route.current.$$route.route
 
-      Controller.extend(this.route, this);
+      this.constructor.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
       this.requester.bind(this);
       this.request();
@@ -304,14 +304,14 @@
       var promise = this.requester.request();
       promise.then(this._setData);
 
-      Controller.trigger(this, this.route, 'request');
+      this.constructor.trigger(this, this.route, 'request');
     },
 
     _setData: function(response) {
       this._setPagination(response);
       this.data = response.data;
       this.loaded = true;
-      Controller.trigger(this, this.route, 'loaded');
+      this.constructor.trigger(this, this.route, 'loaded');
     },
 
     _setPagination: function(response) {
@@ -347,7 +347,7 @@
       promise.then(this.request);
     }
   };
-}(_, local.Controller, local));
+}(_, local));
 
 // controller.js
 (function(_, angular, Cyberhawk, HooksMethods, ExtensionMethods, ControllerMethods) {
