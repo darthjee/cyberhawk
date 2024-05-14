@@ -1,6 +1,6 @@
 (function(_, local) {
   local.ExtensionMethods = {
-    withPath: function(path, name, func) {
+    withPath(path, name, func) {
       if (path.constructor == Array) {
         let klass = this;
 
@@ -20,11 +20,11 @@
       }
     },
 
-    extensionFor: function(path) {
+    extensionFor(path) {
       return this.pathExtensions[path] || {};
     },
 
-    extend: function(path, controller) {
+    extend(path, controller) {
       var methods = this.extensionFor(path);
 
       _.extend(controller, methods);
