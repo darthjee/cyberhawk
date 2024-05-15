@@ -18,6 +18,8 @@
       this._addMethods();
 
       _.extend(this.controller, this.attributes);
+
+      this._bind();
     }
 
     _addMethods() {
@@ -25,6 +27,11 @@
       _.extend(this.controller.constructor, HooksMethods, ExtensionMethods);
 
       this.controller.constructor.extend(this.attributes.route, this.controller);
+    }
+
+    _bind() {
+      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
+      this.controller.requester.bind(this.controller);
     }
   }
 
@@ -40,9 +47,6 @@
 
     build(controller, callback) {
       new Builder(controller, this.attributes()).build();
-
-      _.bindAll(controller, "_setData", "save", "request", "_goIndex", "_error");
-      controller.requester.bind(controller);
       
       if (callback) {
         callback.apply(controller);
