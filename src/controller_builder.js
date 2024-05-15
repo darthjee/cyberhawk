@@ -20,11 +20,11 @@
     }
 
     build(controller, callback) {
-      _.extend(controller.constructor.prototype, ControllerMethods);
-      _.extend(controller.constructor, HooksMethods, ExtensionMethods);
+      this._addMethods(controller);
 
       _.extend(controller, this.attributes());
-      Controller.extend(controller.route, controller);
+
+      controller.constructor.extend(controller.route, controller);
       _.bindAll(controller, "_setData", "save", "request", "_goIndex", "_error");
       controller.requester.bind(controller);
       
@@ -33,6 +33,11 @@
       }
 
       controller.request();
+    }
+
+    _addMethods(controller) {
+      _.extend(controller.constructor.prototype, ControllerMethods);
+      _.extend(controller.constructor, HooksMethods, ExtensionMethods);
     }
 
     attributes() {
