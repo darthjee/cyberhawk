@@ -8,6 +8,26 @@
       "cyberhawk/pagination"
     ]);
 
+  class Builder {
+    constructor(controller, attributes) {
+      this.controller = controller;
+      this.attributes = attributes;
+    }
+
+    build() {
+      this._addMethods();
+
+      _.extend(this.controller, this.attributes);
+    }
+
+    _addMethods() {
+      _.extend(this.controller.constructor.prototype, ControllerMethods);
+      _.extend(this.controller.constructor, HooksMethods, ExtensionMethods);
+
+      this.controller.constructor.extend(this.attributes.route, this.controller);
+    }
+  }
+
   class ControllerBuilderService {
     constructor(requesterBuilder, notifier, $location, $timeout, pagination, route) {
       this.requesterBuilder = requesterBuilder;
@@ -19,11 +39,8 @@
     }
 
     build(controller, callback) {
-      this._addMethods(controller);
+      new Builder(controller, this.attributes()).build();
 
-      _.extend(controller, this.attributes());
-
-      controller.constructor.extend(controller.route, controller);
       _.bindAll(controller, "_setData", "save", "request", "_goIndex", "_error");
       controller.requester.bind(controller);
       
@@ -32,11 +49,6 @@
       }
 
       controller.request();
-    }
-
-    _addMethods(controller) {
-      _.extend(controller.constructor.prototype, ControllerMethods);
-      _.extend(controller.constructor, HooksMethods, ExtensionMethods);
     }
 
     attributes() {
