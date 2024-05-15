@@ -247,15 +247,15 @@
         let klass = this;
 
         _.each(path, function(route) {
-          klass.setPathExtension(route, name, func);
+          klass._setPathExtension(route, name, func);
         });
       } else {
-        this.setPathExtension(path, name, func);
+        this._setPathExtension(path, name, func);
       }
     },
 
     extend(path, controller) {
-      var methods = this.getPathExtensions(path);
+      var methods = this._getPathExtensions(path);
 
       if (methods) {
         _.extend(controller, methods);
@@ -266,8 +266,8 @@
       }
     },
 
-    setPathExtension(path, name, func) {
-      var extensions = this.getPathExtensions(path);
+    _setPathExtension(path, name, func) {
+      var extensions = this._getPathExtensions(path);
 
       if (!extensions) {
         extensions = this.pathExtensions[path] = {};
@@ -280,7 +280,7 @@
       }
     },
 
-    getPathExtensions(path) {
+    _getPathExtensions(path) {
       if (!this.pathExtensions) {
         this.pathExtensions = {};
       }
