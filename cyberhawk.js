@@ -218,7 +218,7 @@
     },
 
     _setPathHooks(path, event, func) {
-      hooks = _getPathHooks(path, event);
+      var hooks = _getPathHooks(path, event);
 
       if (!hooks) {
         if ( !this.pathHooks[path] ){
