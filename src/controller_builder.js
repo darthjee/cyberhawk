@@ -1,6 +1,5 @@
 (function(_, angular, local) {
-  var Controller = local.Cyberhawk.Controller,
-    HooksMethods = local.HooksMethods,
+  var HooksMethods = local.HooksMethods,
     ExtensionMethods = local.ExtensionMethods,
     ControllerMethods = local.ControllerMethods,
 
@@ -8,6 +7,33 @@
       "cyberhawk/notifier", "cyberhawk/requester",
       "cyberhawk/pagination"
     ]);
+
+  class Builder {
+    constructor(controller, attributes) {
+      this.controller = controller;
+      this.attributes = attributes;
+    }
+
+    build() {
+      this._addMethods();
+
+      _.extend(this.controller, this.attributes);
+
+      this._bind();
+    }
+
+    _addMethods() {
+      _.extend(this.controller.constructor.prototype, ControllerMethods);
+      _.extend(this.controller.constructor, HooksMethods, ExtensionMethods);
+
+      this.controller.constructor.extend(this.attributes.route, this.controller);
+    }
+
+    _bind() {
+      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
+      this.controller.requester.bind(this.controller);
+    }
+  }
 
   class ControllerBuilderService {
     constructor(requesterBuilder, notifier, $location, $timeout, pagination, route) {
@@ -19,15 +45,12 @@
       this.route = route;
     }
 
-    build(controller) {
-      _.extend(controller.constructor.prototype, ControllerMethods);
-      _.extend(controller.constructor, HooksMethods, ExtensionMethods);
-
-      _.extend(controller, this.attributes());
-      Controller.extend(controller.route, controller);
-      _.bindAll(controller, "_setData", "save", "request", "_goIndex", "_error");
-      controller.requester.bind(controller);
-
+    build(controller, callback) {
+      new Builder(controller, this.attributes()).build();
+      
+      if (callback) {
+        callback.apply(controller);
+      }
 
       controller.request();
     }

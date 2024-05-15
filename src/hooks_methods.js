@@ -4,46 +4,49 @@
       if (path.constructor == Array) {
         let klass = this;
 
-        return _.each(path, function(route) {
-          klass.on(route, event, func);
+        _.each(path, function(route) {
+          klass._setathHooks(route, event, func);
         });
+      } else {
+        _setathHooks(path, event, func);
       }
-
-      if (!this.pathHooks[path]) {
-        this.pathHooks[path] = {};
-      }
-
-      if (!this.pathHooks[path][event]) {
-        this.pathHooks[path][event] = [];
-      }
-
-      this.pathHooks[path][event].push(func);
-    },
-
-    pathHooksFor(path, event) {
-      if (!this.pathHooks[path]) {
-        return [];
-      }
-
-      if (!this.pathHooks[path][event]) {
-        return [];
-      }
-
-      return this.pathHooks[path][event];
     },
 
     trigger(controller, path, event) {
-      var hooks = this.pathHooksFor(path, event);
+      var hooks = this._getPathHooks(path, event);
 
-      _.each(hooks, function(func) {
-        if (typeof func == "string") {
-          controller[func]();
-        } else {
-          func.apply(controller);
-        }
-      });
+      if ( hooks ) {
+        _.each(hooks, function(func) {
+          if (typeof func == "string") {
+            controller[func]();
+          } else {
+            func.apply(controller);
+          }
+        });
+      }
     },
 
-    pathHooks: {}
+    _setPathHooks(path, event, func) {
+      var hooks = _getPathHooks(path, event);
+
+      if (!hooks) {
+        if ( !this.pathHooks[path] ){
+          this.pathHooks[path] = {};
+        }
+        hooks = this.pathHooks[path][event] = [];
+      }
+
+      hooks.push(func);
+    },
+
+    _getPathHooks(path, event) {
+      if (!this.pathHooks) {
+        this.pathHooks = {};
+      }
+
+      if (this.pathHooks[path]) {
+        return this.pathHooks[path][event];
+      }
+    }
   };
 }(window._, local));

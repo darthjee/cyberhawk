@@ -195,47 +195,50 @@
       if (path.constructor == Array) {
         let klass = this;
 
-        return _.each(path, function(route) {
-          klass.on(route, event, func);
+        _.each(path, function(route) {
+          klass._setathHooks(route, event, func);
         });
+      } else {
+        _setathHooks(path, event, func);
       }
-
-      if (!this.pathHooks[path]) {
-        this.pathHooks[path] = {};
-      }
-
-      if (!this.pathHooks[path][event]) {
-        this.pathHooks[path][event] = [];
-      }
-
-      this.pathHooks[path][event].push(func);
-    },
-
-    pathHooksFor(path, event) {
-      if (!this.pathHooks[path]) {
-        return [];
-      }
-
-      if (!this.pathHooks[path][event]) {
-        return [];
-      }
-
-      return this.pathHooks[path][event];
     },
 
     trigger(controller, path, event) {
-      var hooks = this.pathHooksFor(path, event);
+      var hooks = this._getPathHooks(path, event);
 
-      _.each(hooks, function(func) {
-        if (typeof func == "string") {
-          controller[func]();
-        } else {
-          func.apply(controller);
-        }
-      });
+      if ( hooks ) {
+        _.each(hooks, function(func) {
+          if (typeof func == "string") {
+            controller[func]();
+          } else {
+            func.apply(controller);
+          }
+        });
+      }
     },
 
-    pathHooks: {}
+    _setPathHooks(path, event, func) {
+      var hooks = _getPathHooks(path, event);
+
+      if (!hooks) {
+        if ( !this.pathHooks[path] ){
+          this.pathHooks[path] = {};
+        }
+        hooks = this.pathHooks[path][event] = [];
+      }
+
+      hooks.push(func);
+    },
+
+    _getPathHooks(path, event) {
+      if (!this.pathHooks) {
+        this.pathHooks = {};
+      }
+
+      if (this.pathHooks[path]) {
+        return this.pathHooks[path][event];
+      }
+    }
   };
 }(window._, local));
 
@@ -246,37 +249,47 @@
       if (path.constructor === Array) {
         let klass = this;
 
-        return _.each(path, function(route) {
-          klass.withPath(route, name, func);
+        _.each(path, function(route) {
+          klass._setPathExtension(route, name, func);
         });
-      }
-
-      if (!this.pathExtensions[path]) {
-        this.pathExtensions[path] = {};
-      }
-
-      if (typeof name == "string") {
-        this.pathExtensions[path][name] = func;
       } else {
-        _.extend(this.pathExtensions[path], name);
+        this._setPathExtension(path, name, func);
       }
-    },
-
-    extensionFor(path) {
-      return this.pathExtensions[path] || {};
     },
 
     extend(path, controller) {
-      var methods = this.extensionFor(path);
+      var methods = this._getPathExtensions(path);
 
-      _.extend(controller, methods);
+      if (methods) {
+        _.extend(controller, methods);
 
-      for(var method in methods) {
-        _.bindAll(controller, method);
+        for(var method in methods) {
+          _.bindAll(controller, method);
+        }
       }
     },
 
-    pathExtensions: {}
+    _setPathExtension(path, name, func) {
+      var extensions = this._getPathExtensions(path);
+
+      if (!extensions) {
+        extensions = this.pathExtensions[path] = {};
+      }
+
+      if (typeof name == "string") {
+        extensions[name] = func;
+      } else {
+        _.extend(extensions, name);
+      }
+    },
+
+    _getPathExtensions(path) {
+      if (!this.pathExtensions) {
+        this.pathExtensions = {};
+      }
+
+      return this.pathExtensions[path];
+    }
   };
 }(window._, local));
 
@@ -688,8 +701,7 @@
 
 // controller_builder.js
 (function(_, angular, local) {
-  var Controller = local.Cyberhawk.Controller,
-    HooksMethods = local.HooksMethods,
+  var HooksMethods = local.HooksMethods,
     ExtensionMethods = local.ExtensionMethods,
     ControllerMethods = local.ControllerMethods,
 
@@ -697,6 +709,33 @@
       "cyberhawk/notifier", "cyberhawk/requester",
       "cyberhawk/pagination"
     ]);
+
+  class Builder {
+    constructor(controller, attributes) {
+      this.controller = controller;
+      this.attributes = attributes;
+    }
+
+    build() {
+      this._addMethods();
+
+      _.extend(this.controller, this.attributes);
+
+      this._bind();
+    }
+
+    _addMethods() {
+      _.extend(this.controller.constructor.prototype, ControllerMethods);
+      _.extend(this.controller.constructor, HooksMethods, ExtensionMethods);
+
+      this.controller.constructor.extend(this.attributes.route, this.controller);
+    }
+
+    _bind() {
+      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
+      this.controller.requester.bind(this.controller);
+    }
+  }
 
   class ControllerBuilderService {
     constructor(requesterBuilder, notifier, $location, $timeout, pagination, route) {
@@ -708,15 +747,12 @@
       this.route = route;
     }
 
-    build(controller) {
-      _.extend(controller.constructor.prototype, ControllerMethods);
-      _.extend(controller.constructor, HooksMethods, ExtensionMethods);
-
-      _.extend(controller, this.attributes());
-      Controller.extend(controller.route, controller);
-      _.bindAll(controller, "_setData", "save", "request", "_goIndex", "_error");
-      controller.requester.bind(controller);
-
+    build(controller, callback) {
+      new Builder(controller, this.attributes()).build();
+      
+      if (callback) {
+        callback.apply(controller);
+      }
 
       controller.request();
     }
