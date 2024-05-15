@@ -9,10 +9,6 @@
         });
       }
 
-      if (!this.getPathExtensions(path)) {
-        this.getPathExtensions(path) = {};
-      }
-
       if (typeof name == "string") {
         this.getPathExtensions(path)[name] = func;
       } else {

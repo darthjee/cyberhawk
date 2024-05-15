@@ -13,11 +13,11 @@
         this.pathHooks[path] = {};
       }
 
-      if (!this.pathHooks[path][event]) {
-        this.pathHooks[path][event] = [];
+      if (!this.getPathHooks(path, event)) {
+        this.getPathHooks(path, event) = [];
       }
 
-      this.pathHooks[path][event].push(func);
+      this.getPathHooks(path, event).push(func);
     },
 
     pathHooksFor(path, event) {
@@ -25,11 +25,11 @@
         return [];
       }
 
-      if (!this.pathHooks[path][event]) {
+      if (!this.getPathHooks(path, event)) {
         return [];
       }
 
-      return this.pathHooks[path][event];
+      return this.getPathHooks(path, event);
     },
 
     trigger(controller, path, event) {
