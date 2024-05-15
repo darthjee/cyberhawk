@@ -251,19 +251,19 @@
         });
       }
 
-      if (!this.pathExtensions[path]) {
-        this.pathExtensions[path] = {};
+      if (!this.getPathExtensions(path)) {
+        this.getPathExtensions(path) = {};
       }
 
       if (typeof name == "string") {
-        this.pathExtensions[path][name] = func;
+        this.getPathExtensions(path)[name] = func;
       } else {
-        _.extend(this.pathExtensions[path], name);
+        _.extend(this.getPathExtensions(path), name);
       }
     },
 
     extensionFor(path) {
-      return this.pathExtensions[path] || {};
+      return this.getPathExtensions(path) || {};
     },
 
     extend(path, controller) {
@@ -276,7 +276,11 @@
       }
     },
 
-    pathExtensions: {}
+    getPathExtensions(path) {
+      if (!this.pathExtensions) {
+        this.pathExtensions = {}
+      }
+    }
   };
 }(window._, local));
 
