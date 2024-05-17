@@ -11,7 +11,6 @@
 
       this.constructor.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
-      this.getRequester().bind(this);
       this.request();
     },
 
@@ -64,7 +63,8 @@
 
     _getRequester() {
       if ( !this.requester ) {
-        this.requester = requesterBuilder.build(this.location);
+        this.requester = this.requesterBuilder.build(this.location);
+        this.requester.bind(this);
       }
 
       return this.requester;

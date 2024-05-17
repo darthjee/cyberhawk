@@ -307,7 +307,6 @@
 
       this.constructor.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
-      this.getRequester().bind(this);
       this.request();
     },
 
@@ -360,7 +359,8 @@
 
     _getRequester() {
       if ( !this.requester ) {
-        this.requester = requesterBuilder.build(this.location);
+        this.requester = this.requesterBuilder.build(this.location);
+        this.requester.bind(this);
       }
 
       return this.requester;
@@ -741,7 +741,6 @@
 
     _bind() {
       _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
-      this.controller.getRequester().bind(this.controller);
     }
   }
 
