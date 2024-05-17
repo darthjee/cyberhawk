@@ -57,6 +57,7 @@
 
     attributes() {
       return {
+        requesterBuilder: this.requesterBuilder,
         requester: this.requesterBuilder.build(this.$location),
         notifier: this.notifier,
         pagination: this.pagination,

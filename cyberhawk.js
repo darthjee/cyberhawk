@@ -297,6 +297,7 @@
 (function(_, local) {
   local.ControllerMethods = {
     construct(requesterBuilder, notifier, $location, $timeout, pagination, route) {
+      this.requesterBuilder = requesterBuilder;
       this.requester = requesterBuilder.build($location);
       this.notifier = notifier;
       this.pagination = pagination;
@@ -759,6 +760,7 @@
 
     attributes() {
       return {
+        requesterBuilder: this.requesterBuilder,
         requester: this.requesterBuilder.build(this.$location),
         notifier: this.notifier,
         pagination: this.pagination,
