@@ -359,11 +359,15 @@
 
     _getRequester() {
       if ( !this.requester ) {
-        this.requester = this.requesterBuilder.build(this.location);
+        this._buildRequester();
         this.requester.bind(this);
       }
 
       return this.requester;
+    },
+
+    _buildRequester() {
+      this.requester = this.requesterBuilder.build(this.location);
     }
   };
 }(window._, local));
