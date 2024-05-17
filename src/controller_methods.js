@@ -64,14 +64,21 @@
     _getRequester() {
       if ( !this.requester ) {
         this._buildRequester();
-        this.requester.bind(this);
       }
 
       return this.requester;
     },
 
     _buildRequester() {
-      this.requester = this.requesterBuilder.build(this.location);
+      this.requester = this.requesterBuilder.build(this._requesterAttributes());
+      this.requester.bind(this);
+    },
+
+    _requesterAttributes() {
+      return {
+        search: this.location.$$search,
+        path: this.location.$$path
+      }
     }
   };
 }(window._, local));

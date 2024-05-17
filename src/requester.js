@@ -37,10 +37,10 @@
     this.http = $http;
   }
 
-  RequesterServiceBuilder.prototype.build = function($location) {
-    var query = querystring.encode($location.$$search),
-      path = $location.$$path + ".json?" + query,
-      savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+  RequesterServiceBuilder.prototype.build = function(attributes) {
+    var query = querystring.encode(attributes.search),
+      path = attributes.path + ".json?" + query,
+      savePath = attributes.path.replace(/\/(new|edit)$/, "") + ".json";
 
     return new RequesterService(path, savePath, this.http);
   };

@@ -360,14 +360,21 @@
     _getRequester() {
       if ( !this.requester ) {
         this._buildRequester();
-        this.requester.bind(this);
       }
 
       return this.requester;
     },
 
     _buildRequester() {
-      this.requester = this.requesterBuilder.build(this.location);
+      this.requester = this.requesterBuilder.build(this._requesterAttributes());
+      this.requester.bind(this);
+    },
+
+    _requesterAttributes() {
+      return {
+        search: this.location.$$search,
+        path: this.location.$$path
+      }
     }
   };
 }(window._, local));
@@ -553,10 +560,10 @@
     this.http = $http;
   }
 
-  RequesterServiceBuilder.prototype.build = function($location) {
-    var query = querystring.encode($location.$$search),
-      path = $location.$$path + ".json?" + query,
-      savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+  RequesterServiceBuilder.prototype.build = function(attributes) {
+    var query = querystring.encode(attributes.search),
+      path = attributes.path + ".json?" + query,
+      savePath = attributes.path.replace(/\/(new|edit)$/, "") + ".json";
 
     return new RequesterService(path, savePath, this.http);
   };
