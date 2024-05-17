@@ -308,12 +308,12 @@
 
       this.constructor.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
-      this.requester.bind(this);
+      this.getRequester().bind(this);
       this.request();
     },
 
     request() {
-      var promise = this.requester.request();
+      var promise = this._getRequester().request();
       promise.then(this._setData);
 
       this.constructor.trigger(this, this.route, "request");
@@ -333,7 +333,7 @@
     },
 
     save() {
-      var promise = this.requester.saveRequest(this.payload());
+      var promise = this._getRequester().saveRequest(this.payload());
 
       promise.then(this._setData);
       promise.then(this._goIndex);
@@ -355,8 +355,12 @@
     },
 
     delete(id) {
-      var promise = this.requester.deleteRequest(id);
+      var promise = this.getRequester().deleteRequest(id);
       promise.then(this.request);
+    },
+
+    _getRequester() {
+      return this.requester;
     }
   };
 }(window._, local));
@@ -734,7 +738,7 @@
 
     _bind() {
       _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
-      this.controller.requester.bind(this.controller);
+      this.controller.getRequester().bind(this.controller);
     }
   }
 

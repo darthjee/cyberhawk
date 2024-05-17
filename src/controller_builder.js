@@ -31,7 +31,7 @@
 
     _bind() {
       _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
-      this.controller.requester.bind(this.controller);
+      this.controller.getRequester().bind(this.controller);
     }
   }
 
