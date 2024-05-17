@@ -77,8 +77,12 @@
     _requesterAttributes() {
       return {
         search: this.location.$$search,
-        path: this.location.$$path
+        path: this._getPath()
       }
+    },
+
+    _getPath() {
+      return this.location.$$path;
     }
   };
 }(window._, local));
