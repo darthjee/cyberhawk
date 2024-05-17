@@ -298,7 +298,6 @@
   local.ControllerMethods = {
     construct(requesterBuilder, notifier, $location, $timeout, pagination, route) {
       this.requesterBuilder = requesterBuilder;
-      this.requester = requesterBuilder.build($location);
       this.notifier = notifier;
       this.pagination = pagination;
       this.location = $location;
@@ -360,6 +359,10 @@
     },
 
     _getRequester() {
+      if ( !this.requester ) {
+        this.requester = requesterBuilder.build(this.location);
+      }
+
       return this.requester;
     }
   };
@@ -765,7 +768,6 @@
     attributes() {
       return {
         requesterBuilder: this.requesterBuilder,
-        requester: this.requesterBuilder.build(this.$location),
         notifier: this.notifier,
         pagination: this.pagination,
         location: this.$location,

@@ -2,7 +2,6 @@
   local.ControllerMethods = {
     construct(requesterBuilder, notifier, $location, $timeout, pagination, route) {
       this.requesterBuilder = requesterBuilder;
-      this.requester = requesterBuilder.build($location);
       this.notifier = notifier;
       this.pagination = pagination;
       this.location = $location;
@@ -64,6 +63,10 @@
     },
 
     _getRequester() {
+      if ( !this.requester ) {
+        this.requester = requesterBuilder.build(this.location);
+      }
+
       return this.requester;
     }
   };
