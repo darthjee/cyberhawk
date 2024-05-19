@@ -23,10 +23,14 @@
     }
 
     _addMethods() {
-      _.extend(this.controller.constructor.prototype, ControllerMethods);
-      _.extend(this.controller.constructor, HooksMethods, ExtensionMethods);
+      var constructor = this.controller.constructor,
+        prototype = _.extend(ControllerMethods, constructor.prototype),
+        methods =  _.extend(HooksMethods, ExtensionMethods, constructor);;
 
-      this.controller.constructor.extend(this.attributes.route, this.controller);
+      _.extend(constructor.prototype, prototype);
+      _.extend(constructor, methods);
+
+      constructor.extend(this.attributes.route, this.controller);
     }
 
     _bind() {
