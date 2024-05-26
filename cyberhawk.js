@@ -297,7 +297,7 @@
 (function(_, local) {
   local.ControllerMethods = {
     construct(requesterBuilder, notifier, $location, $timeout, pagination, route) {
-      this.requester = requesterBuilder.build($location);
+      this.requesterBuilder = requesterBuilder;
       this.notifier = notifier;
       this.pagination = pagination;
       this.location = $location;
@@ -307,12 +307,11 @@
 
       this.constructor.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
-      this.requester.bind(this);
       this.request();
     },
 
     request() {
-      var promise = this.requester.request();
+      var promise = this._getRequester().request();
       promise.then(this._setData);
 
       this.constructor.trigger(this, this.route, "request");
@@ -332,7 +331,7 @@
     },
 
     save() {
-      var promise = this.requester.saveRequest(this.payload());
+      var promise = this._getRequester().saveRequest(this.payload());
 
       promise.then(this._setData);
       promise.then(this._goIndex);
@@ -354,8 +353,32 @@
     },
 
     delete(id) {
-      var promise = this.requester.deleteRequest(id);
+      var promise = this.getRequester().deleteRequest(id);
       promise.then(this.request);
+    },
+
+    _getRequester() {
+      if ( !this.requester ) {
+        this._buildRequester();
+      }
+
+      return this.requester;
+    },
+
+    _buildRequester() {
+      this.requester = this.requesterBuilder.build(this._requesterAttributes());
+      this.requester.bind(this);
+    },
+
+    _requesterAttributes() {
+      return {
+        search: this.location.$$search,
+        path: this._getPath()
+      }
+    },
+
+    _getPath() {
+      return this.location.$$path;
     }
   };
 }(window._, local));
@@ -541,10 +564,10 @@
     this.http = $http;
   }
 
-  RequesterServiceBuilder.prototype.build = function($location) {
-    var query = querystring.encode($location.$$search),
-      path = $location.$$path + ".json?" + query,
-      savePath = $location.$$path.replace(/\/(new|edit)$/, "") + ".json";
+  RequesterServiceBuilder.prototype.build = function(attributes) {
+    var query = querystring.encode(attributes.search),
+      path = attributes.path + ".json?" + query,
+      savePath = attributes.path.replace(/\/(new|edit)$/, "") + ".json";
 
     return new RequesterService(path, savePath, this.http);
   };
@@ -725,15 +748,18 @@
     }
 
     _addMethods() {
-      _.extend(this.controller.constructor.prototype, ControllerMethods);
-      _.extend(this.controller.constructor, HooksMethods, ExtensionMethods);
+      var constructor = this.controller.constructor,
+        prototype = _.extend(ControllerMethods, constructor.prototype),
+        methods =  _.extend(HooksMethods, ExtensionMethods, constructor);;
 
-      this.controller.constructor.extend(this.attributes.route, this.controller);
+      _.extend(constructor.prototype, prototype);
+      _.extend(constructor, methods);
+
+      constructor.extend(this.attributes.route, this.controller);
     }
 
     _bind() {
       _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
-      this.controller.requester.bind(this.controller);
     }
   }
 
@@ -759,7 +785,7 @@
 
     attributes() {
       return {
-        requester: this.requesterBuilder.build(this.$location),
+        requesterBuilder: this.requesterBuilder,
         notifier: this.notifier,
         pagination: this.pagination,
         location: this.$location,

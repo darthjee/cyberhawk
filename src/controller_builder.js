@@ -23,15 +23,18 @@
     }
 
     _addMethods() {
-      _.extend(this.controller.constructor.prototype, ControllerMethods);
-      _.extend(this.controller.constructor, HooksMethods, ExtensionMethods);
+      var constructor = this.controller.constructor,
+        prototype = _.extend(ControllerMethods, constructor.prototype),
+        methods =  _.extend(HooksMethods, ExtensionMethods, constructor);;
 
-      this.controller.constructor.extend(this.attributes.route, this.controller);
+      _.extend(constructor.prototype, prototype);
+      _.extend(constructor, methods);
+
+      constructor.extend(this.attributes.route, this.controller);
     }
 
     _bind() {
       _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
-      this.controller.requester.bind(this.controller);
     }
   }
 
@@ -57,7 +60,7 @@
 
     attributes() {
       return {
-        requester: this.requesterBuilder.build(this.$location),
+        requesterBuilder: this.requesterBuilder,
         notifier: this.notifier,
         pagination: this.pagination,
         location: this.$location,

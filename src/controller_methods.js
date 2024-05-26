@@ -1,7 +1,7 @@
 (function(_, local) {
   local.ControllerMethods = {
     construct(requesterBuilder, notifier, $location, $timeout, pagination, route) {
-      this.requester = requesterBuilder.build($location);
+      this.requesterBuilder = requesterBuilder;
       this.notifier = notifier;
       this.pagination = pagination;
       this.location = $location;
@@ -11,12 +11,11 @@
 
       this.constructor.extend(this.route, this);
       _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
-      this.requester.bind(this);
       this.request();
     },
 
     request() {
-      var promise = this.requester.request();
+      var promise = this._getRequester().request();
       promise.then(this._setData);
 
       this.constructor.trigger(this, this.route, "request");
@@ -36,7 +35,7 @@
     },
 
     save() {
-      var promise = this.requester.saveRequest(this.payload());
+      var promise = this._getRequester().saveRequest(this.payload());
 
       promise.then(this._setData);
       promise.then(this._goIndex);
@@ -58,8 +57,32 @@
     },
 
     delete(id) {
-      var promise = this.requester.deleteRequest(id);
+      var promise = this.getRequester().deleteRequest(id);
       promise.then(this.request);
+    },
+
+    _getRequester() {
+      if ( !this.requester ) {
+        this._buildRequester();
+      }
+
+      return this.requester;
+    },
+
+    _buildRequester() {
+      this.requester = this.requesterBuilder.build(this._requesterAttributes());
+      this.requester.bind(this);
+    },
+
+    _requesterAttributes() {
+      return {
+        search: this.location.$$search,
+        path: this._getPath()
+      }
+    },
+
+    _getPath() {
+      return this.location.$$path;
     }
   };
 }(window._, local));
