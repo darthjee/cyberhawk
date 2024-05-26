@@ -740,11 +740,19 @@
     }
 
     build() {
-      this._addMethods();
+      if (!this._hasMethods()) {
+        this._addMethods();
+      }
 
       _.extend(this.controller, this.attributes);
 
       this._bind();
+    }
+
+    _hasMethods() {
+      var constructor = this.controller.constructor;
+
+      return constructor.cyberhawk;
     }
 
     _addMethods() {
@@ -756,6 +764,7 @@
       _.extend(constructor, methods);
 
       constructor.extend(this.attributes.route, this.controller);
+      constructor.cyberhawk = true;
     }
 
     _bind() {
@@ -775,7 +784,7 @@
 
     build(controller, callback) {
       new Builder(controller, this.attributes()).build();
-      
+
       if (callback) {
         callback.apply(controller);
       }
