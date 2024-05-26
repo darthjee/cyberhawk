@@ -405,7 +405,7 @@
   _.extend(fn, ControllerMethods);
 
   app.controller("Cyberhawk.Controller", [
-    "cyberhawk_builder", function(builder) { builder.build(this); }
+    "cyberhawk_builder", function(builder) { builder.buildAndRequest(this); }
   ]);
 
   Cyberhawk.Controller = Controller;
@@ -788,6 +788,10 @@
       if (callback) {
         callback.apply(controller);
       }
+    }
+
+    buildAndRequest(controller, callback) {
+      this.build(controller, callback);
 
       controller.request();
     }

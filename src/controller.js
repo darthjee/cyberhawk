@@ -19,7 +19,7 @@
   _.extend(fn, ControllerMethods);
 
   app.controller("Cyberhawk.Controller", [
-    "cyberhawk_builder", function(builder) { builder.build(this); }
+    "cyberhawk_builder", function(builder) { builder.buildAndRequest(this); }
   ]);
 
   Cyberhawk.Controller = Controller;

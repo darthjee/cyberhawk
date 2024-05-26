@@ -63,6 +63,10 @@
       if (callback) {
         callback.apply(controller);
       }
+    }
+
+    buildAndRequest(controller, callback) {
+      this.build(controller, callback);
 
       controller.request();
     }
