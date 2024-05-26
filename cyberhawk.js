@@ -306,7 +306,7 @@
       this.route = route.current.$$route.route;
 
       this.constructor.extend(this.route, this);
-      _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error");
+      _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error", "_triggerSaved");
       this.request();
     },
 
@@ -334,8 +334,13 @@
       var promise = this._getRequester().saveRequest(this.payload());
 
       promise.then(this._setData);
+      promise.then(this._triggerSaved);
       promise.then(this._goIndex);
       promise.error(this._error);
+    },
+
+    _triggerSaved() {
+      this.constructor.trigger(this, this.route, "saved");
     },
 
     payload() {
@@ -776,7 +781,7 @@
     }
 
     _bind() {
-      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
+      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error", "_triggerSaved");
     }
   }
 

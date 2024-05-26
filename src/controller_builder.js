@@ -51,7 +51,7 @@
     }
 
     _bind() {
-      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error");
+      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error", "_triggerSaved");
     }
   }
 
