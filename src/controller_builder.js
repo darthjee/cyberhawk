@@ -28,7 +28,7 @@
 
     _callback() {
       if (this.callback) {
-        this.callback.apply(this.controller);
+        this.callback.apply(this.controller.constructor);
       }
     }
 
