@@ -306,8 +306,12 @@
       this.route = route.current.$$route.route;
 
       this.constructor.extend(this.route, this);
-      _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error", "_triggerSaved");
+      this.bindMethods();
       this.request();
+    },
+
+    bindMethods() {
+      _.bindAll(this, "_setData", "save", "request", "_goIndex", "_error", "_triggerSaved");
     },
 
     request() {
@@ -781,7 +785,7 @@
     }
 
     _bind() {
-      _.bindAll(this.controller, "_setData", "save", "request", "_goIndex", "_error", "_triggerSaved");
+      this.controller.bindMethods();
     }
   }
 
