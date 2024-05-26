@@ -743,15 +743,18 @@
     build() {
       if (!this._isBuilt()) {
         this._addMethods();
-
-        if (this.callback) {
-          this.callback.apply(this.controller);
-        }
+        this._callback();
       }
 
       _.extend(this.controller, this.attributes);
 
       this._bind();
+    }
+
+    _callback() {
+      if (this.callback) {
+        this.callback.apply(this.controller);
+      }
     }
 
     _isBuilt() {
