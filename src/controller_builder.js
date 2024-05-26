@@ -9,17 +9,33 @@
     ]);
 
   class Builder {
-    constructor(controller, attributes) {
+    constructor(controller, attributes, callback) {
       this.controller = controller;
       this.attributes = attributes;
+      this.callback   = callback;
     }
 
     build() {
-      this._addMethods();
+      if (!this._isBuilt()) {
+        this._addMethods();
+        this._callback();
+      }
 
       _.extend(this.controller, this.attributes);
 
       this._bind();
+    }
+
+    _callback() {
+      if (this.callback) {
+        this.callback.apply(this.controller);
+      }
+    }
+
+    _isBuilt() {
+      var constructor = this.controller.constructor;
+
+      return constructor.cyberhawk;
     }
 
     _addMethods() {
@@ -31,6 +47,7 @@
       _.extend(constructor, methods);
 
       constructor.extend(this.attributes.route, this.controller);
+      constructor.cyberhawk = true;
     }
 
     _bind() {
@@ -49,11 +66,11 @@
     }
 
     build(controller, callback) {
-      new Builder(controller, this.attributes()).build();
-      
-      if (callback) {
-        callback.apply(controller);
-      }
+      new Builder(controller, this.attributes(), callback).build();
+    }
+
+    buildAndRequest(controller, callback) {
+      this.build(controller, callback);
 
       controller.request();
     }
