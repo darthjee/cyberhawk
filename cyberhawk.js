@@ -196,10 +196,10 @@
         let klass = this;
 
         _.each(path, function(route) {
-          klass._setathHooks(route, event, func);
+          klass._setPathHooks(route, event, func);
         });
       } else {
-        _setathHooks(path, event, func);
+        this._setPathHooks(path, event, func);
       }
     },
 
@@ -218,7 +218,7 @@
     },
 
     _setPathHooks(path, event, func) {
-      var hooks = _getPathHooks(path, event);
+      var hooks = this._getPathHooks(path, event);
 
       if (!hooks) {
         if ( !this.pathHooks[path] ){
