@@ -22,6 +22,10 @@
   "ignore": [
     "src/*",
     "**/.*",
-    "node_modules"
+    "node_modules",
+    ".circleci",
+    "template",
+    "src",
+    "scripts"
   ]
 }
