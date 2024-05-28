@@ -1,5 +1,24 @@
 {
+  "name": "cyberhawk",
+  "homepage": "https://github.com/darthjee/cyberhawk",
+  "description": "Tarquinn like application",
+  "main": "cyberhawk.js",
+  "keywords": [
+    "tarquinn",
+    "angularjs"
+  ],
+  "authors": [
+    "darthjee"
+  ],
+  "license": "MIT",
   "dependencies": {
-    "angular": "1.4.8"
-  }
+    "angular-route": "1.4.8",
+    "angular": "1.4.8",
+    "underscore": ">= 1.13.6",
+    "querystring": "0.2.1"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules"
+  ]
 }
