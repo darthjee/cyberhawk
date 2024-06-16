@@ -1,6 +1,6 @@
 {
   "name": "cyberhawk",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "homepage": "https://github.com/darthjee/cyberhawk",
   "description": "Tarquinn like application",
   "main": "cyberhawk.js",
@@ -16,8 +16,7 @@
   "dependencies": {
     "angular-route": "1.4.8",
     "angular": "1.4.8",
-    "underscore": ">= 1.13.6",
-    "querystring": "0.2.1"
+    "underscore": ">= 1.13.6"
   },
   "ignore": [
     "src/*",
@@ -26,6 +25,7 @@
     ".circleci",
     "template",
     "src",
+    "src/*",
     "scripts"
   ]
 }
