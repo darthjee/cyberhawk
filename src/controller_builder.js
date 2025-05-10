@@ -9,10 +9,10 @@
     ]);
 
   class Builder {
-    constructor(controller, attributes, callback) {
+    constructor(controller, attributes, options) {
       this.controller = controller;
       this.attributes = attributes;
-      this.callback   = callback;
+      this.options    = options
     }
 
     build() {
@@ -27,8 +27,8 @@
     }
 
     _callback() {
-      if (this.callback) {
-        this.callback.apply(this.controller.constructor);
+      if (this.options.callback) {
+        this.options.callback.apply(this.controller.constructor);
       }
     }
 
@@ -65,12 +65,21 @@
       this.route = route;
     }
 
-    build(controller, callback) {
-      new Builder(controller, this.attributes(), callback).build();
+    build(controller, options) {
+      if (options == undefined) {
+        options = {};
+      } else if (options.constructor == Function) {
+        options = {
+          callback: options
+        };
+      }
+      this.options = options;
+
+      new Builder(controller, this.attributes(), options).build();
     }
 
-    buildAndRequest(controller, callback) {
-      this.build(controller, callback);
+    buildAndRequest(controller, options) {
+      this.build(controller, options);
 
       controller.request();
     }
@@ -82,9 +91,20 @@
         pagination: this.pagination,
         location: this.$location,
         $timeout: this.$timeout,
-        routeParams: this.route.current.pathParams,
-        route: this.route.current.$$route.route
+        routeParams: this.fetchAttribute("routeParams", function() {
+          return this.route.current.pathParams;
+        }),
+        route: this.fetchAttribute("route", function() {
+          return this.route.current.$$route.route;
+        }),
+        path: this.fetchAttribute("path", function() {
+          return this.$location.$$path;
+        }),
       };
+    }
+
+    fetchAttribute(name, def) {
+      return this.options[name] || def.apply(this);
     }
   }
 

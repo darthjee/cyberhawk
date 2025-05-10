@@ -62,7 +62,7 @@
     },
 
     _goIndex() {
-      this.location.path(this.location.$$path.replace(/\/(edit|new)$/, ""));
+      this.location.path(this.path.replace(/\/(edit|new)$/, ""));
     },
 
     delete(id) {
@@ -91,6 +91,10 @@
     },
 
     _getPath() {
+      if ( this.path.constructor == String ) {
+        return this.path;
+      }
+
       return this.location.$$path;
     }
   };
