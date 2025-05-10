@@ -390,7 +390,7 @@
       if ( this.path.constructor == String ) {
         return this.path;
       }
-      
+
       return this.location.$$path;
     }
   };
