@@ -9,10 +9,10 @@
     ]);
 
   class Builder {
-    constructor(controller, attributes, callback) {
+    constructor(controller, attributes, options) {
       this.controller = controller;
       this.attributes = attributes;
-      this.callback   = callback;
+      this.options    = options
     }
 
     build() {
@@ -27,8 +27,8 @@
     }
 
     _callback() {
-      if (this.callback) {
-        this.callback.apply(this.controller.constructor);
+      if (this.options.callback) {
+        this.options.callback.apply(this.controller.constructor);
       }
     }
 
@@ -65,12 +65,20 @@
       this.route = route;
     }
 
-    build(controller, callback) {
-      new Builder(controller, this.attributes(), callback).build();
+    build(controller, options) {
+      new Builder(controller, this.attributes(), options).build();
     }
 
-    buildAndRequest(controller, callback) {
-      this.build(controller, callback);
+    buildAndRequest(controller, options) {
+      if (options == undefined) {
+        options = {};
+      } else if (options.constructor == Function) {
+        options = {
+          callback: options
+        };
+      }
+
+      this.build(controller, options);
 
       controller.request();
     }
