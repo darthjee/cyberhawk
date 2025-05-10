@@ -66,10 +66,6 @@
     }
 
     build(controller, options) {
-      new Builder(controller, this.attributes(), options).build();
-    }
-
-    buildAndRequest(controller, options) {
       if (options == undefined) {
         options = {};
       } else if (options.constructor == Function) {
@@ -79,6 +75,10 @@
       }
       this.options = options;
 
+      new Builder(controller, this.attributes(), options).build();
+    }
+
+    buildAndRequest(controller, options) {
       this.build(controller, options);
 
       controller.request();
@@ -91,7 +91,7 @@
         pagination: this.pagination,
         location: this.$location,
         $timeout: this.$timeout,
-        routeParams: this.fetchAttribute("pathParams", function() {
+        routeParams: this.fetchAttribute("routeParams", function() {
           return this.route.current.pathParams;
         }),
         route: this.fetchAttribute("route", function() {
