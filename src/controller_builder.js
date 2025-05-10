@@ -96,7 +96,10 @@
         }),
         route: this.fetchAttribute("route", function() {
           return this.route.current.$$route.route;
-        })
+        }),
+        path: this.fetchAttribute("path", function() {
+          return this.$location.$$path;
+        }),
       };
     }
 
