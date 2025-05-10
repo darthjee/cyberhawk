@@ -811,6 +811,7 @@
           callback: options
         };
       }
+      this.options = options;
 
       this.build(controller, options);
 
@@ -824,9 +825,17 @@
         pagination: this.pagination,
         location: this.$location,
         $timeout: this.$timeout,
-        routeParams: this.route.current.pathParams,
-        route: this.route.current.$$route.route
+        routeParams: this.fetchAttribute("pathParams", function() {
+          return this.route.current.pathParams;
+        }),
+        route: this.fetchAttribute("route", function() {
+          return this.route.current.$$route.route;
+        })
       };
+    }
+
+    fetchAttribute(name, def) {
+      return this.options[name] || def.apply(this);
     }
   }
 
