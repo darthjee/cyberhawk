@@ -1,6 +1,6 @@
 {
   "name": "cyberhawk",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "homepage": "https://github.com/darthjee/cyberhawk",
   "description": "Tarquinn like application",
   "main": "cyberhawk.js",
