@@ -766,7 +766,7 @@
 
     _callback() {
       if (this.options.callback) {
-        this.options.callback.apply(this.controller.constructor);
+        this.options.callback.apply(this.controller);
       }
     }
 
