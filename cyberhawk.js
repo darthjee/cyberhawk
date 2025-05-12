@@ -756,17 +756,17 @@
     build() {
       if (!this._isBuilt()) {
         this._addMethods();
-        this._callback();
       }
 
       _.extend(this.controller, this.attributes);
 
       this._bind();
+      this._callback();
     }
 
     _callback() {
       if (this.options.callback) {
-        this.options.callback.apply(this.controller.constructor);
+        this.options.callback.apply(this.controller);
       }
     }
 
