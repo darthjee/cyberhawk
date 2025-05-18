@@ -84,7 +84,8 @@
 
   angular.module("cyberhawk", [
     "cyberhawk/requester", "cyberhawk/controller",
-    "cyberhawk/config", "cyberhawk/builder"
+    "cyberhawk/config", "cyberhawk/builder",
+    "cyberhawk/global_state"
   ]);
 }(window.angular, window, local));
 
@@ -803,13 +804,14 @@
   }
 
   class ControllerBuilderService {
-    constructor(requesterBuilder, notifier, $location, $timeout, pagination, route) {
+    constructor(requesterBuilder, notifier, $location, $timeout, pagination, route, global_state) {
       this.requesterBuilder = requesterBuilder;
       this.notifier = notifier;
       this.pagination = pagination;
       this.$location = $location;
       this.$timeout = $timeout;
       this.route = route;
+      this.global_state = global_state;
     }
 
     build(controller, options) {
@@ -838,6 +840,7 @@
         pagination: this.pagination.build(),
         location: this.$location,
         $timeout: this.$timeout,
+        global_state: this.global_state,
         routeParams: this.fetchAttribute("routeParams", function() {
           return this.route.current.pathParams;
         }),
@@ -855,8 +858,8 @@
     }
   }
 
-  function ControllerBuilderServiceFactory(requesterBuilder, notifier, $location, $timeout, pagination, route) {
-    return new ControllerBuilderService(requesterBuilder, notifier, $location, $timeout, pagination, route);
+  function ControllerBuilderServiceFactory(requesterBuilder, notifier, $location, $timeout, pagination, route, global_state) {
+    return new ControllerBuilderService(requesterBuilder, notifier, $location, $timeout, pagination, route, global_state);
   }
 
   module.service("cyberhawk_builder", [
@@ -866,8 +869,29 @@
     "$timeout",
     "cyberhawk_pagination",
     "$route",
+    "cyberhawk_global_state",
     ControllerBuilderServiceFactory
   ]);
 }(window._, window.angular, local));
+
+// global_state.js
+(function(_, angular) {
+  var module = angular.module("cyberhawk/global_state", []);
+
+
+  class GlobalStateService {
+    constructor() {
+      this.id = Math.floor(Math.random() * 1000000);
+    }
+  }
+
+  function GlobalStateServiceFactory($http) {
+    return new GlobalStateService($http);
+  }
+
+  module.service("cyberhawk_global_state", [
+    GlobalStateServiceFactory
+  ]);
+}(window._, window.angular));  
 
 }());

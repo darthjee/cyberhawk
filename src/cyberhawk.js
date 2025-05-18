@@ -3,6 +3,7 @@
 
   angular.module("cyberhawk", [
     "cyberhawk/requester", "cyberhawk/controller",
-    "cyberhawk/config", "cyberhawk/builder"
+    "cyberhawk/config", "cyberhawk/builder",
+    "cyberhawk/global_state"
   ]);
 }(window.angular, window, local));
