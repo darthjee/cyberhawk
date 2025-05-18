@@ -84,7 +84,8 @@
 
   angular.module("cyberhawk", [
     "cyberhawk/requester", "cyberhawk/controller",
-    "cyberhawk/config", "cyberhawk/builder"
+    "cyberhawk/config", "cyberhawk/builder",
+    "cyberhawk/global_state"
   ]);
 }(window.angular, window, local));
 
@@ -875,7 +876,7 @@
 
 // global_state.js
 (function(_, angular) {
-  var module = angular.module("cyberhawk", []);
+  var module = angular.module("cyberhawk/global_state", []);
 
 
   class GlobalStateService {
