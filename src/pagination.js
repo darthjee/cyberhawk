@@ -21,11 +21,20 @@
       }
     }
   }
+  class PaginationBuilderService {
+    constructor(builder) {
+      this.builder = builder;
+    }
+
+    build(pagination) {
+      return new PaginationService(this.builder);
+    }
+  }
 
   Cyberhawk.PaginationService = PaginationService;
 
   function PaginationServiceFactory(builder) {
-    return new PaginationService(builder);
+    return new PaginationBuilderService(builder);
   }
 
   module.service("cyberhawk_pagination", [

@@ -88,7 +88,7 @@
       return {
         requesterBuilder: this.requesterBuilder,
         notifier: this.notifier,
-        pagination: this.pagination,
+        pagination: this.pagination.build(),
         location: this.$location,
         $timeout: this.$timeout,
         routeParams: this.fetchAttribute("routeParams", function() {

@@ -1,0 +1,66 @@
+Arguments: 
+  /usr/local/bin/node /opt/yarn-v1.22.18/bin/yarn.js publish
+
+PATH: 
+  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  17.9.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/-/user/org.couchdb.user:darthjee: failed to authenticate: Could not authenticate darthjee: bad password
+      at Request.params.callback [as _callback] (/opt/yarn-v1.22.18/lib/cli.js:66138:18)
+      at Request.self.callback (/opt/yarn-v1.22.18/lib/cli.js:140883:22)
+      at Request.emit (node:events:527:28)
+      at Request.<anonymous> (/opt/yarn-v1.22.18/lib/cli.js:141855:10)
+      at Request.emit (node:events:527:28)
+      at IncomingMessage.<anonymous> (/opt/yarn-v1.22.18/lib/cli.js:141777:12)
+      at Object.onceWrapper (node:events:641:28)
+      at IncomingMessage.emit (node:events:539:35)
+      at endReadableNT (node:internal/streams/readable:1345:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "cyberhawk",
+    "version": "0.8.0",
+    "homepage": "https://github.com/darthjee/cyberhawk",
+    "description": "Tarquinn like application",
+    "main": "cyberhawk.js",
+    "keywords": [
+      "tarquinn",
+      "angularjs",
+      "cyberhawk"
+    ],
+    "authors": [
+      "darthjee"
+    ],
+    "license": "MIT",
+    "dependencies": {
+      "angular-route": "1.4.8",
+      "angular": "1.4.8",
+      "underscore": ">= 1.13.6"
+    },
+    "ignore": [
+      "src/*",
+      "**/.*",
+      "node_modules",
+      ".circleci",
+      "template",
+      "src",
+      "src/*",
+      "scripts"
+    ]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

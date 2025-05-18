@@ -172,11 +172,20 @@
       }
     }
   }
+  class PaginationBuilderService {
+    constructor(builder) {
+      this.builder = builder;
+    }
+
+    build(pagination) {
+      return new PaginationService(this.builder);
+    }
+  }
 
   Cyberhawk.PaginationService = PaginationService;
 
   function PaginationServiceFactory(builder) {
-    return new PaginationService(builder);
+    return new PaginationBuilderService(builder);
   }
 
   module.service("cyberhawk_pagination", [
@@ -826,7 +835,7 @@
       return {
         requesterBuilder: this.requesterBuilder,
         notifier: this.notifier,
-        pagination: this.pagination,
+        pagination: this.pagination.build(),
         location: this.$location,
         $timeout: this.$timeout,
         routeParams: this.fetchAttribute("routeParams", function() {
