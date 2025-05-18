@@ -10,12 +10,13 @@ FILES=$FILES" config.js"
 FILES=$FILES" controller_builder.js"
 FILES=$FILES" global_state.js"
 
-cp template/header.js cyberhawk.js
+cp template/header.js tmp_building.js
 
 for FILE in $FILES; do
-  echo "// $FILE" >> cyberhawk.js
-  cat "src/$FILE" >> cyberhawk.js
-  echo "" >> cyberhawk.js
+  echo "// $FILE" >> tmp_building.js
+  cat "src/$FILE" >> tmp_building.js
+  echo "" >> tmp_building.js
 done
 
-cat template/footer.js >> cyberhawk.js
+cat template/footer.js >> tmp_building.js
+mv tmp_building.js cyberhawk.js
