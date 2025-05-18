@@ -1,5 +1,5 @@
 (function(_, angular) {
-  var module = angular.module("cyberhawk/global_state", []);
+  var module = angular.module("cyberhawk", []);
 
 
   class GlobalStateService {
@@ -12,7 +12,7 @@
     return new GlobalStateService($http);
   }
 
-  module.service("global_state", [
+  module.service("cyberhawk_global_state", [
     GlobalStateServiceFactory
   ]);
 }(window._, window.angular));  
