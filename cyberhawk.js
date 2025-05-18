@@ -870,4 +870,6 @@
   ]);
 }(window._, window.angular, local));
 
+// global_state.js
+
 }());
