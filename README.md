@@ -1,5 +1,7 @@
 # cyberhawk
 
+![cyberhawk](https://raw.githubusercontent.com/darthjee/cyberhawk/master/cyberhawk.jpg)
+
 This package adds several ready to use classes for an Angular2 project
 
 ## Usage
