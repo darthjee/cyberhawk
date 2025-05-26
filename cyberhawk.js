@@ -570,10 +570,18 @@
 
     saveRequest(data) {
       if (this.path.match(/new.json(\?.*)?$/)) {
-        return this.http.post(this.savePath, data);
+        createRequest(data)
       } else {
-        return this.http.patch(this.savePath, data);
+        updateRequest(data)
       }
+    }
+
+    createRequest(data) {
+      return this.http.post(this.savePath, data);
+    }
+
+    updateRequest(data) {
+      return this.http.patch(this.savePath, data);
     }
 
     deleteRequest(id) {
