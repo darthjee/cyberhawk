@@ -20,9 +20,9 @@
 
     saveRequest(data) {
       if (this.path.match(/new.json(\?.*)?$/)) {
-        this.createRequest(data)
+        return this.createRequest(data)
       } else {
-        this.updateRequest(data)
+        return this.updateRequest(data)
       }
     }
 
